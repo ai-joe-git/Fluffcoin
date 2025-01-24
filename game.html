@@ -69,6 +69,31 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
+
+    #menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #menu button {
+      background: #6e44ff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #menu button:hover {
+      background: #00d4ff;
+    }
   </style>
 </head>
 <body>
@@ -78,13 +103,55 @@
     <div id="layer3" class="layer"></div>
   </div>
 
+  <div id="menu">
+    <h1>Fluff Flappy</h1>
+    <button id="startButton">Start Game</button>
+    <button id="musicButton">Music: On</button>
+    <button id="soundButton">Sound: On</button>
+  </div>
+
   <canvas id="gameCanvas"></canvas>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     let gameStarted = false;
-    
+    let musicEnabled = true;
+    let soundEnabled = true;
+    let backgroundMusic, flapSound, hitSound, pointSound;
+
+    // Load sounds
+    function loadSounds() {
+      backgroundMusic = new Audio("background-music.mp3");
+      backgroundMusic.loop = true;
+      flapSound = new Audio("flap.mp3");
+      hitSound = new Audio("hit.mp3");
+      pointSound = new Audio("point.mp3");
+    }
+
+    // Toggle music
+    document.getElementById("musicButton").addEventListener("click", () => {
+      musicEnabled = !musicEnabled;
+      document.getElementById("musicButton").textContent = `Music: ${musicEnabled ? "On" : "Off"}`;
+      if (musicEnabled) {
+        backgroundMusic.play();
+      } else {
+        backgroundMusic.pause();
+      }
+    });
+
+    // Toggle sound effects
+    document.getElementById("soundButton").addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById("soundButton").textContent = `Sound: ${soundEnabled ? "On" : "Off"}`;
+    });
+
+    // Start game
+    document.getElementById("startButton").addEventListener("click", () => {
+      document.getElementById("menu").style.display = "none";
+      startGame();
+    });
+
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -125,7 +192,40 @@
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
-    let spacing = 600; // 4x more horizontal spacing between obstacles
+    let spacing = 450; // Adjusted horizontal spacing
+
+    // Particles for effect
+    let particles = [];
+    function createParticles(x, y) {
+      for (let i = 0; i < 10; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          size: Math.random() * 3 + 1,
+          speedX: (Math.random() - 0.5) * 2,
+          speedY: (Math.random() - 0.5) * 2,
+          color: `rgba(110, 68, 255, ${Math.random()})`
+        });
+      }
+    }
+
+    function drawParticles() {
+      particles.forEach((particle, index) => {
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+
+        if (particle.size > 0.2) particle.size -= 0.1;
+
+        if (particle.size <= 0.2) {
+          particles.splice(index, 1);
+        }
+      });
+    }
 
     // Initialize canvas and fluff position
     resizeCanvas();
@@ -153,20 +253,10 @@
       });
     }
 
-    function drawStartScreen() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#fff";
-      ctx.font = `${Math.min(canvas.width * 0.08, 30)}px Arial`;
-      ctx.textAlign = "center";
-      ctx.fillText("Tap to Start", canvas.width / 2, canvas.height / 2);
-    }
-
     function update() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (!gameStarted) {
-        drawStartScreen();
         requestAnimationFrame(update);
         return;
       }
@@ -175,8 +265,8 @@
         fluff.velocity += fluff.gravity;
         fluff.y += fluff.velocity;
 
-        // Add new obstacles with 4x more horizontal spacing
-        if (frame % spacing === 0) { // 4x more spacing
+        // Add new obstacles with adjusted horizontal spacing
+        if (frame % spacing === 0) {
           let minHeight = canvas.height * 0.1;
           let maxHeight = canvas.height - gap - minHeight;
           let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
@@ -197,11 +287,13 @@
             (fluff.y < coin.top || fluff.y + fluff.height > canvas.height - coin.bottom)
           ) {
             gameOver = true;
+            if (soundEnabled) hitSound.play();
           }
 
           if (coin.x + coinWidth < fluff.x && !coin.passed) {
             score++;
             coin.passed = true;
+            if (soundEnabled) pointSound.play();
           }
 
           if (coin.x + coinWidth < 0) {
@@ -211,11 +303,13 @@
 
         if (fluff.y + fluff.height > canvas.height || fluff.y < 0) {
           gameOver = true;
+          if (soundEnabled) hitSound.play();
         }
       }
 
       drawFluff();
       drawCoins();
+      drawParticles();
 
       // Draw score
       ctx.fillStyle = "#fff";
@@ -246,6 +340,7 @@
     function startGame() {
       gameStarted = true;
       fluff.velocity = fluff.lift;
+      if (musicEnabled) backgroundMusic.play();
     }
 
     function resetGame() {
@@ -269,6 +364,8 @@
         resetGame();
       } else {
         fluff.velocity = fluff.lift;
+        createParticles(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2);
+        if (soundEnabled) flapSound.play();
       }
     }
 
@@ -277,7 +374,8 @@
     document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
     document.addEventListener("contextmenu", (event) => event.preventDefault());
 
-    // Start the game loop
+    // Load sounds and start the game loop
+    loadSounds();
     resetGame();
     update();
   </script>
