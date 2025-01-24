@@ -181,8 +181,8 @@
       y: 0,
       width: 50,
       height: 50,
-      gravity: 0.2, // Reduced gravity for smoother fall
-      lift: -6, // Adjusted lift for smoother jump
+      gravity: 0.3, // Increased gravity for faster fall
+      lift: -7, // Increased lift for faster jump
       velocity: 0,
       rotation: 0
     };
@@ -197,7 +197,7 @@
 
     // Time-based animation variables
     let lastTime = 0;
-    const obstacleSpeed = 0.1; // Pixels per millisecond (adjust for desired speed)
+    const obstacleSpeed = 0.15; // Increased speed (pixels per millisecond)
 
     // Particles for effect
     let particles = [];
