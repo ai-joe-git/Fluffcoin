@@ -11,23 +11,22 @@
       box-sizing: border-box;
     }
     
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #0a0a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      touch-action: none;
-      position: fixed;
+    html, body {
       width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: fixed;
+      touch-action: none;
+      background: #0a0a1a;
     }
 
-    canvas {
-      display: block;
-      max-width: 100%;
-      max-height: 100vh;
+    #gameCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
       border: 2px solid rgba(110, 68, 255, 0.5);
       box-shadow: 0 0 20px rgba(110, 68, 255, 0.5);
     }
@@ -84,44 +83,37 @@
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-
     let gameStarted = false;
     
     function resizeCanvas() {
-      const aspectRatio = 16/9;
-      let width = window.innerWidth;
-      let height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       
-      if (width / height > aspectRatio) {
-        width = height * aspectRatio;
-      } else {
-        height = width / aspectRatio;
+      // Adjust game elements based on screen size
+      fluff.width = Math.min(canvas.width * 0.1, 50);
+      fluff.height = fluff.width;
+      coinWidth = Math.min(canvas.width * 0.1, 60);
+      gap = Math.min(canvas.height * 0.3, 170);
+      
+      // Reposition fluff if needed
+      if (!gameStarted) {
+        fluff.x = canvas.width * 0.2;
+        fluff.y = canvas.height / 2;
       }
-      
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      
-      // Set actual canvas dimensions for crisp rendering
-      canvas.width = width * window.devicePixelRatio;
-      canvas.height = height * window.devicePixelRatio;
-      
-      // Scale the context to handle the device pixel ratio
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
 
     window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
 
     const fluffImage = new Image();
     fluffImage.src = "flufflogo.png";
 
     let fluff = {
-      x: canvas.width * 0.2,
-      y: canvas.height / 2,
+      x: 0,
+      y: 0,
       width: 50,
       height: 50,
-      gravity: 0.25,
-      lift: -6,
+      gravity: 0.4,
+      lift: -7,
       velocity: 0,
       rotation: 0
     };
@@ -133,6 +125,9 @@
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
+
+    // Initialize canvas and fluff position
+    resizeCanvas();
 
     function drawFluff() {
       ctx.save();
@@ -152,16 +147,16 @@
     function drawCoins() {
       ctx.fillStyle = "#00d4ff";
       coins.forEach((coin) => {
-        // Top coin
         ctx.fillRect(coin.x, 0, coinWidth, coin.top);
-        // Bottom coin
         ctx.fillRect(coin.x, canvas.height - coin.bottom, coinWidth, coin.bottom);
       });
     }
 
     function drawStartScreen() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = "#fff";
-      ctx.font = "30px Arial";
+      ctx.font = `${Math.min(canvas.width * 0.08, 30)}px Arial`;
       ctx.textAlign = "center";
       ctx.fillText("Tap to Start", canvas.width / 2, canvas.height / 2);
     }
@@ -171,7 +166,6 @@
 
       if (!gameStarted) {
         drawStartScreen();
-        drawFluff();
         requestAnimationFrame(update);
         return;
       }
@@ -181,7 +175,7 @@
         fluff.y += fluff.velocity;
 
         if (frame % 100 === 0) {
-          let minHeight = 50;
+          let minHeight = canvas.height * 0.1;
           let maxHeight = canvas.height - gap - minHeight;
           let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
           coins.push({
@@ -193,15 +187,11 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= 3;
+          coin.x -= canvas.width * 0.003;
 
-          let fluffRight = fluff.x + fluff.width * 0.8;
-          let fluffLeft = fluff.x + fluff.width * 0.2;
-          let coinRight = coin.x + coinWidth;
-          
           if (
-            fluffRight > coin.x &&
-            fluffLeft < coinRight &&
+            fluff.x + fluff.width > coin.x &&
+            fluff.x < coin.x + coinWidth &&
             (fluff.y < coin.top || fluff.y + fluff.height > canvas.height - coin.bottom)
           ) {
             gameOver = true;
@@ -225,48 +215,56 @@
       drawFluff();
       drawCoins();
 
+      // Draw score
       ctx.fillStyle = "#fff";
-      ctx.font = "20px Arial";
+      ctx.font = `${Math.min(canvas.width * 0.05, 20)}px Arial`;
       ctx.textAlign = "left";
-      ctx.fillText("Score: " + score, 10, 30);
-      ctx.fillText("High Score: " + highScore, 10, 60);
+      ctx.fillText(`Score: ${score}`, 10, 30);
+      ctx.fillText(`High Score: ${highScore}`, 10, 60);
 
       if (gameOver) {
         if (score > highScore) {
           highScore = score;
           localStorage.setItem("highScore", highScore);
         }
-        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#fff";
-        ctx.font = "30px Arial";
+        ctx.font = `${Math.min(canvas.width * 0.08, 30)}px Arial`;
         ctx.textAlign = "center";
-        ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 20);
-        ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
-        ctx.fillText("Tap to Restart", canvas.width / 2, canvas.height / 2 + 60);
+        ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 40);
+        ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2);
+        ctx.fillText("Tap to Restart", canvas.width / 2, canvas.height / 2 + 40);
       }
 
       frame++;
       requestAnimationFrame(update);
     }
 
+    function startGame() {
+      gameStarted = true;
+      fluff.velocity = fluff.lift;
+    }
+
+    function resetGame() {
+      gameStarted = false;
+      fluff.x = canvas.width * 0.2;
+      fluff.y = canvas.height / 2;
+      fluff.velocity = 0;
+      fluff.rotation = 0;
+      coins = [];
+      score = 0;
+      gameOver = false;
+      frame = 0;
+    }
+
     function handleInput(event) {
       event.preventDefault();
       
       if (!gameStarted) {
-        gameStarted = true;
-        return;
-      }
-
-      if (gameOver) {
-        gameStarted = true;
-        fluff.y = canvas.height / 2;
-        fluff.velocity = 0;
-        fluff.rotation = 0;
-        coins = [];
-        score = 0;
-        gameOver = false;
-        frame = 0;
+        startGame();
+      } else if (gameOver) {
+        resetGame();
       } else {
         fluff.velocity = fluff.lift;
       }
@@ -277,6 +275,8 @@
     document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
     document.addEventListener("contextmenu", (event) => event.preventDefault());
 
+    // Start the game loop
+    resetGame();
     update();
   </script>
 </body>
