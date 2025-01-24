@@ -194,7 +194,7 @@
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
-    let spacing = 300; // Reduced horizontal spacing for faster gameplay
+    let spacing = 450; // Adjusted horizontal spacing
 
     // Particles for effect
     let particles = [];
@@ -262,7 +262,7 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= canvas.width * 0.004 * dt; // Increased speed (changed from 0.002 to 0.004)
+          coin.x -= canvas.width * 0.002 * dt; // Slower speed
 
           if (
             fluff.x + fluff.width > coin.x &&
