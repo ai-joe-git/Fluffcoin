@@ -73,8 +73,8 @@
 
     // Set canvas size based on screen size
     function resizeCanvas() {
-      canvas.width = window.innerWidth * 0.9; // 90% of screen width
-      canvas.height = window.innerHeight * 0.8; // 80% of screen height
+      canvas.width = Math.min(window.innerWidth * 0.9, 480); // Max width: 480px
+      canvas.height = Math.min(window.innerHeight * 0.8, 640); // Max height: 640px
     }
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas(); // Initial resize
@@ -85,28 +85,31 @@
       y: canvas.height / 2,
       width: 40,
       height: 40,
-      gravity: 0.6,
-      lift: -10,
+      gravity: 0.4, // Slower gravity
+      lift: -8, // Reduced lift
       velocity: 0,
+      glow: 0, // Glow effect
     };
 
     // Coin properties
     let coins = [];
     let coinWidth = 40;
-    let gap = 100;
+    let gap = 120; // Larger gap
     let frame = 0;
     let score = 0;
+    let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
 
-    // Draw Fluff
+    // Draw Fluff with glow effect
     function drawFluff() {
       ctx.fillStyle = "#6e44ff"; // Neon purple
       ctx.beginPath();
-      ctx.arc(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2, fluff.width / 2, 0, Math.PI * 2);
+      ctx.arc(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2, fluff.width / 2 + fluff.glow, 0, Math.PI * 2);
       ctx.fill();
+      fluff.glow = Math.max(0, fluff.glow - 0.1); // Reduce glow over time
     }
 
-    // Draw Coins
+    // Draw Coins with glow effect
     function drawCoins() {
       ctx.fillStyle = "#00d4ff"; // Neon blue
       coins.forEach((coin) => {
@@ -124,14 +127,14 @@
       fluff.y += fluff.velocity;
 
       // Generate coins
-      if (frame % 90 === 0) {
+      if (frame % 100 === 0) { // Slower coin generation
         let coinHeight = Math.random() * (canvas.height - gap);
         coins.push({ x: canvas.width, top: coinHeight, bottom: canvas.height - coinHeight - gap });
       }
 
       // Move coins
       coins.forEach((coin, index) => {
-        coin.x -= 2;
+        coin.x -= 2; // Slower coin speed
 
         // Check collision
         if (
@@ -164,13 +167,18 @@
       drawFluff();
       drawCoins();
 
-      // Display score
+      // Display score and high score
       ctx.fillStyle = "#fff";
       ctx.font = "20px Arial";
       ctx.fillText("Score: " + score, 10, 30);
+      ctx.fillText("High Score: " + highScore, 10, 60);
 
       // Game over screen
       if (gameOver) {
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("highScore", highScore);
+        }
         ctx.fillStyle = "#fff";
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
@@ -191,6 +199,7 @@
         gameOver = false;
       } else {
         fluff.velocity = fluff.lift;
+        fluff.glow = 5; // Add glow effect on tap
       }
     }
     canvas.addEventListener("click", handleInput);
