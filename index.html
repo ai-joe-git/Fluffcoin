@@ -165,7 +165,8 @@
     .social-links {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      flex-wrap: wrap; /* Allow wrapping to the next line */
+      gap: 10px; /* Reduced gap for better spacing */
     }
 
     .social-links a {
@@ -175,6 +176,8 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: 1px solid rgba(110, 68, 255, 0.3);
       box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+      flex: 1 1 45%; /* Allow two buttons per row with some spacing */
+      text-align: center; /* Center text inside buttons */
     }
 
     .social-links a:hover {
