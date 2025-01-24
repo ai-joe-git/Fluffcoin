@@ -125,9 +125,9 @@
     function loadSounds() {
       backgroundMusic = new Audio("background-music.mp3");
       backgroundMusic.loop = true;
-      flapSound = new Audio("flap.mp3");
-      hitSound = new Audio("hit.mp3");
-      pointSound = new Audio("point.mp3");
+      flapSound = new Audio("flap.wav"); // Updated to .wav
+      hitSound = new Audio("hit.wav"); // Updated to .wav
+      pointSound = new Audio("point.wav"); // Updated to .wav
     }
 
     // Toggle music
@@ -188,6 +188,7 @@
     };
 
     let coins = [];
+    let stars = []; // Array to hold stars
     let coinWidth = 60;
     let gap = Math.min(canvas.height * 0.4, 200); // Increased gap
     let score = 0;
@@ -258,6 +259,30 @@
       });
     }
 
+    // Draw stars
+    function drawStars() {
+      stars.forEach((star, index) => {
+        ctx.save();
+        ctx.translate(star.x + fluff.width / 2, star.y + fluff.height / 2);
+        ctx.rotate(Math.sin(star.animationFrame * 0.05) * 0.2); // Floating animation
+        ctx.fillStyle = "yellow";
+        ctx.beginPath();
+        ctx.moveTo(0, -fluff.height / 2);
+        ctx.lineTo(fluff.width / 4, -fluff.height / 4);
+        ctx.lineTo(fluff.width / 2, 0);
+        ctx.lineTo(fluff.width / 4, fluff.height / 4);
+        ctx.lineTo(0, fluff.height / 2);
+        ctx.lineTo(-fluff.width / 4, fluff.height / 4);
+        ctx.lineTo(-fluff.width / 2, 0);
+        ctx.lineTo(-fluff.width / 4, -fluff.height / 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        star.animationFrame++;
+      });
+    }
+
     function update(timeStamp) {
       if (!lastTime) lastTime = timeStamp;
       const deltaTime = timeStamp - lastTime;
@@ -285,6 +310,15 @@
             bottom: canvas.height - coinHeight - gap,
             passed: false
           });
+
+          // Randomly add a star between obstacles
+          if (Math.random() < 0.5) { // 50% chance to spawn a star
+            stars.push({
+              x: canvas.width + Math.random() * 200, // Random horizontal position
+              y: Math.random() * (canvas.height - fluff.height), // Random vertical position
+              animationFrame: 0
+            });
+          }
         }
 
         coins.forEach((coin, index) => {
@@ -310,6 +344,26 @@
           }
         });
 
+        // Check for star collisions
+        stars.forEach((star, index) => {
+          star.x -= obstacleSpeed * deltaTime; // Move stars with obstacles
+
+          if (
+            fluff.x + fluff.width > star.x &&
+            fluff.x < star.x + fluff.width &&
+            fluff.y + fluff.height > star.y &&
+            fluff.y < star.y + fluff.height
+          ) {
+            score += 2; // Add 2 points for collecting a star
+            stars.splice(index, 1); // Remove the star
+            if (soundEnabled) pointSound.play();
+          }
+
+          if (star.x + fluff.width < 0) {
+            stars.splice(index, 1); // Remove star if it goes off-screen
+          }
+        });
+
         if (fluff.y + fluff.height > canvas.height || fluff.y < 0) {
           gameOver = true;
           if (soundEnabled) hitSound.play();
@@ -318,6 +372,7 @@
 
       drawFluff();
       drawCoins();
+      drawStars(); // Draw stars
       drawParticles();
 
       // Draw score
@@ -361,6 +416,7 @@
       fluff.velocity = 0;
       fluff.rotation = 0;
       coins = [];
+      stars = []; // Reset stars
       score = 0;
       gameOver = false;
       particles = [];
