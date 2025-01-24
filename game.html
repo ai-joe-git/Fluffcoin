@@ -10,7 +10,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     html, body {
       width: 100%;
       height: 100%;
@@ -52,17 +52,17 @@
 
     #layer1 {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="10" fill="rgba(110, 68, 255, 0.1)" /></svg>');
-      animation-duration: 20s;
+      animation-duration: 40s;
     }
 
     #layer2 {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="5" fill="rgba(0, 212, 255, 0.1)" /></svg>');
-      animation-duration: 15s;
+      animation-duration: 30s;
     }
 
     #layer3 {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><polygon points="100,10 40,198 190,78 10,78 160,198" fill="rgba(110, 68, 255, 0.1)" /></svg>');
-      animation-duration: 10s;
+      animation-duration: 20s;
     }
 
     @keyframes moveBackground {
@@ -125,9 +125,9 @@
     function loadSounds() {
       backgroundMusic = new Audio("background-music.mp3");
       backgroundMusic.loop = true;
-      flapSound = new Audio("flapp.wav"); // Updated to .wav
-      hitSound = new Audio("hit.wav"); // Updated to .wav
-      pointSound = new Audio("point.wav"); // Updated to .wav
+      flapSound = new Audio("flapp.wav");
+      hitSound = new Audio("hit.wav");
+      pointSound = new Audio("point.wav");
     }
 
     // Toggle music
@@ -157,13 +157,13 @@
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
+
       // Adjust game elements based on screen size
       fluff.width = Math.min(canvas.width * 0.1, 50);
       fluff.height = fluff.width;
       coinWidth = Math.min(canvas.width * 0.1, 60);
       gap = Math.min(canvas.height * 0.4, 200); // Increased gap
-      
+
       // Reposition fluff if needed
       if (!gameStarted) {
         fluff.x = canvas.width * 0.2;
@@ -241,7 +241,7 @@
       ctx.translate(fluff.x + fluff.width/2, fluff.y + fluff.height/2);
       fluff.rotation = Math.min(Math.max(fluff.velocity * 3, -45), 45);
       ctx.rotate(fluff.rotation * Math.PI/180);
-      
+
       if (fluffImage.complete) {
         ctx.drawImage(fluffImage, -fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
       } else {
@@ -251,20 +251,42 @@
       ctx.restore();
     }
 
+    // Draw obstacles with light effects
     function drawCoins() {
-      ctx.fillStyle = "#00d4ff";
       coins.forEach((coin) => {
+        // Add gradient and texture to obstacles
+        const gradient = ctx.createLinearGradient(coin.x, 0, coin.x + coinWidth, 0);
+        gradient.addColorStop(0, "#00d4ff");
+        gradient.addColorStop(1, "#6e44ff");
+        ctx.fillStyle = gradient;
+
+        // Draw top obstacle
         ctx.fillRect(coin.x, 0, coinWidth, coin.top);
+
+        // Draw bottom obstacle
         ctx.fillRect(coin.x, canvas.height - coin.bottom, coinWidth, coin.bottom);
+
+        // Add light effect
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = `rgba(110, 68, 255, 0.2)`;
+        ctx.fillRect(coin.x - 10, 0, coinWidth + 20, coin.top);
+        ctx.fillRect(coin.x - 10, canvas.height - coin.bottom, coinWidth + 20, coin.bottom);
+        ctx.globalCompositeOperation = "source-over";
       });
     }
 
-    // Draw stars
+    // Draw stars with glowing effect
     function drawStars() {
       stars.forEach((star, index) => {
         ctx.save();
         ctx.translate(star.x + fluff.width / 2, star.y + fluff.height / 2);
         ctx.rotate(Math.sin(star.animationFrame * 0.05) * 0.2); // Floating animation
+
+        // Add glowing effect
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "yellow";
+
+        // Draw star
         ctx.fillStyle = "yellow";
         ctx.beginPath();
         ctx.moveTo(0, -fluff.height / 2);
@@ -277,6 +299,7 @@
         ctx.lineTo(-fluff.width / 4, -fluff.height / 4);
         ctx.closePath();
         ctx.fill();
+
         ctx.restore();
 
         star.animationFrame++;
@@ -424,7 +447,7 @@
 
     function handleInput(event) {
       event.preventDefault();
-      
+
       if (!gameStarted) {
         startGame();
       } else if (gameOver) {
