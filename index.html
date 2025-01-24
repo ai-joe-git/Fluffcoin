@@ -185,10 +185,16 @@
     /* Footer */
     footer {
       text-align: center;
-      padding: 10px; /* Reduced padding */
+      padding: 8px; /* Further reduced padding */
       background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
       border-top: 1px solid rgba(110, 68, 255, 0.3);
-      font-size: 0.9rem; /* Reduced font size */
+      font-size: 0.8rem; /* Further reduced font size */
+      min-height: 60px; /* Ensure footer has a minimum height */
+      box-sizing: border-box; /* Include padding in height calculation */
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* Center content vertically */
+      align-items: center; /* Center content horizontally */
     }
   </style>
 </head>
