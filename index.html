@@ -131,6 +131,12 @@
       padding: 50px 20px;
     }
 
+    .roadmap img {
+      width: 200px; /* Same size as hero logo */
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite; /* Floating animation */
+    }
+
     .timeline {
       display: flex;
       justify-content: space-around;
@@ -179,9 +185,10 @@
     /* Footer */
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 10px; /* Reduced padding */
       background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
       border-top: 1px solid rgba(110, 68, 255, 0.3);
+      font-size: 0.9rem; /* Reduced font size */
     }
   </style>
 </head>
@@ -227,6 +234,7 @@
 
   <!-- Roadmap Section -->
   <div class="roadmap">
+    <img src="flufflogo.png" alt="FluffCoin Logo"> <!-- Added logo here -->
     <h2>Roadmap</h2>
     <div class="timeline">
       <div class="phase">Phase 1: Launch FluffCoin</div>
