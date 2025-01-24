@@ -90,15 +90,15 @@
       y: canvas.height / 2,
       width: 60, // Adjusted for image size
       height: 60, // Adjusted for image size
-      gravity: 0.4, // Slower gravity
-      lift: -8, // Reduced lift
+      gravity: 0.3, // Slower gravity for smoother movement
+      lift: -7, // Reduced lift for smoother movement
       velocity: 0,
     };
 
     // Coin properties
     let coins = [];
     let coinWidth = 40;
-    let gap = 120; // Larger gap
+    let gap = 150; // Larger gap for easier gameplay
     let frame = 0;
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
