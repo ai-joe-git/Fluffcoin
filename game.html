@@ -190,11 +190,14 @@
     let coins = [];
     let coinWidth = 60;
     let gap = Math.min(canvas.height * 0.4, 200); // Increased gap
-    let frame = 0;
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
-    let spacing = 450; // Adjusted horizontal spacing
+    let spacing = 300; // Reverted to original horizontal spacing
+
+    // Time-based animation variables
+    let lastTime = 0;
+    const obstacleSpeed = 0.1; // Pixels per millisecond (adjust for desired speed)
 
     // Particles for effect
     let particles = [];
@@ -255,7 +258,11 @@
       });
     }
 
-    function update() {
+    function update(timeStamp) {
+      if (!lastTime) lastTime = timeStamp;
+      const deltaTime = timeStamp - lastTime;
+      lastTime = timeStamp;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (!gameStarted) {
@@ -264,11 +271,11 @@
       }
 
       if (!gameOver) {
-        fluff.velocity += fluff.gravity;
-        fluff.y += fluff.velocity;
+        fluff.velocity += fluff.gravity * (deltaTime / 16); // Adjust for deltaTime
+        fluff.y += fluff.velocity * (deltaTime / 16); // Adjust for deltaTime
 
-        // Add new obstacles with adjusted horizontal spacing
-        if (frame % spacing === 0) {
+        // Add new obstacles with original horizontal spacing
+        if (coins.length === 0 || coins[coins.length - 1].x < canvas.width - spacing) {
           let minHeight = canvas.height * 0.1;
           let maxHeight = canvas.height - gap - minHeight;
           let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
@@ -281,7 +288,7 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= canvas.width * 0.004; // Increased speed
+          coin.x -= obstacleSpeed * deltaTime; // Time-based movement
 
           if (
             fluff.x + fluff.width > coin.x &&
@@ -338,7 +345,6 @@
         document.getElementById("menu").style.display = "block";
       }
 
-      frame++;
       requestAnimationFrame(update);
     }
 
@@ -357,7 +363,6 @@
       coins = [];
       score = 0;
       gameOver = false;
-      frame = 0;
       particles = [];
     }
 
@@ -385,7 +390,7 @@
     // Load sounds and start the game loop
     loadSounds();
     resetGame();
-    update();
+    requestAnimationFrame(update);
   </script>
 </body>
 </html>
