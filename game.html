@@ -124,7 +124,7 @@
     // Load sounds
     function loadSounds() {
       backgroundMusic = new Audio("background-music.mp3");
-      backgroundMusic.loop = true; // Ensure the music loops infinitely
+      backgroundMusic.loop = true;
       flapSound = new Audio("flap.mp3");
       hitSound = new Audio("hit.mp3");
       pointSound = new Audio("point.mp3");
@@ -181,8 +181,8 @@
       y: 0,
       width: 50,
       height: 50,
-      gravity: 0.3, // Increased gravity for faster fall
-      lift: -7, // Increased lift for faster jump
+      gravity: 0.2, // Reduced gravity for smoother fall
+      lift: -6, // Adjusted lift for smoother jump
       velocity: 0,
       rotation: 0
     };
@@ -262,7 +262,7 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= canvas.width * 0.003 * dt; // Increased speed
+          coin.x -= canvas.width * 0.002 * dt; // Slower speed
 
           if (
             fluff.x + fluff.width > coin.x &&
