@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Fluff Flappy</title>
   <style>
     body {
@@ -13,6 +13,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      touch-action: none; /* Prevent touch scrolling */
     }
     canvas {
       display: block;
@@ -79,16 +80,19 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas(); // Initial resize
 
+    // Load Fluff logo image
+    const fluffImage = new Image();
+    fluffImage.src = "flufflogo.png"; // Replace with your image path
+
     // Fluff properties
     let fluff = {
       x: 50,
       y: canvas.height / 2,
-      width: 40,
-      height: 40,
+      width: 60, // Adjusted for image size
+      height: 60, // Adjusted for image size
       gravity: 0.4, // Slower gravity
       lift: -8, // Reduced lift
       velocity: 0,
-      glow: 0, // Glow effect
     };
 
     // Coin properties
@@ -100,16 +104,14 @@
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
 
-    // Draw Fluff with glow effect
+    // Draw Fluff
     function drawFluff() {
-      ctx.fillStyle = "#6e44ff"; // Neon purple
-      ctx.beginPath();
-      ctx.arc(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2, fluff.width / 2 + fluff.glow, 0, Math.PI * 2);
-      ctx.fill();
-      fluff.glow = Math.max(0, fluff.glow - 0.1); // Reduce glow over time
+      if (fluffImage.complete) {
+        ctx.drawImage(fluffImage, fluff.x, fluff.y, fluff.width, fluff.height);
+      }
     }
 
-    // Draw Coins with glow effect
+    // Draw Coins
     function drawCoins() {
       ctx.fillStyle = "#00d4ff"; // Neon blue
       coins.forEach((coin) => {
@@ -190,7 +192,8 @@
     }
 
     // Handle clicks and touch events
-    function handleInput() {
+    function handleInput(event) {
+      event.preventDefault(); // Prevent default touch behavior
       if (gameOver) {
         fluff.y = canvas.height / 2;
         fluff.velocity = 0;
@@ -199,11 +202,13 @@
         gameOver = false;
       } else {
         fluff.velocity = fluff.lift;
-        fluff.glow = 5; // Add glow effect on tap
       }
     }
     canvas.addEventListener("click", handleInput);
-    canvas.addEventListener("touchstart", handleInput, { passive: true }); // Fix touch event
+    canvas.addEventListener("touchstart", handleInput, { passive: false }); // Fix touch event
+
+    // Prevent zooming and scrolling
+    document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
 
     // Start the game
     update();
