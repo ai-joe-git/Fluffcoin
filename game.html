@@ -150,6 +150,7 @@
     // Start game
     document.getElementById("startButton").addEventListener("click", () => {
       document.getElementById("menu").style.display = "none";
+      resetGame();
       startGame();
     });
 
@@ -357,6 +358,7 @@
       score = 0;
       gameOver = false;
       frame = 0;
+      particles = [];
     }
 
     function handleInput(event) {
@@ -367,6 +369,7 @@
       } else if (gameOver) {
         resetGame();
         document.getElementById("menu").style.display = "none";
+        startGame();
       } else {
         fluff.velocity = fluff.lift;
         createParticles(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2);
