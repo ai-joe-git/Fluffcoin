@@ -93,7 +93,7 @@
       fluff.width = Math.min(canvas.width * 0.1, 50);
       fluff.height = fluff.width;
       coinWidth = Math.min(canvas.width * 0.1, 60);
-      gap = Math.min(canvas.height * 0.3, 170);
+      gap = Math.min(canvas.height * 0.4, 200); // Increased gap
       
       // Reposition fluff if needed
       if (!gameStarted) {
@@ -120,7 +120,7 @@
 
     let coins = [];
     let coinWidth = 60;
-    let gap = 170;
+    let gap = Math.min(canvas.height * 0.4, 200); // Increased gap
     let frame = 0;
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
@@ -187,7 +187,7 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= canvas.width * 0.003;
+          coin.x -= canvas.width * 0.002; // Slower speed
 
           if (
             fluff.x + fluff.width > coin.x &&
