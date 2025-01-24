@@ -125,6 +125,7 @@
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
+    let spacing = 150; // Horizontal spacing between obstacles
 
     // Initialize canvas and fluff position
     resizeCanvas();
@@ -174,7 +175,8 @@
         fluff.velocity += fluff.gravity;
         fluff.y += fluff.velocity;
 
-        if (frame % 100 === 0) {
+        // Add new obstacles with horizontal spacing
+        if (frame % 150 === 0) { // Reduced frequency for more spacing
           let minHeight = canvas.height * 0.1;
           let maxHeight = canvas.height - gap - minHeight;
           let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
