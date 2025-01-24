@@ -112,8 +112,8 @@
       y: 0,
       width: 50,
       height: 50,
-      gravity: 0.4,
-      lift: -7,
+      gravity: 0.2, // Reduced gravity for smoother fall
+      lift: -6, // Adjusted lift for smoother jump
       velocity: 0,
       rotation: 0
     };
@@ -125,7 +125,7 @@
     let score = 0;
     let highScore = localStorage.getItem("highScore") || 0;
     let gameOver = false;
-    let spacing = 150; // Horizontal spacing between obstacles
+    let spacing = 600; // 4x more horizontal spacing between obstacles
 
     // Initialize canvas and fluff position
     resizeCanvas();
@@ -175,8 +175,8 @@
         fluff.velocity += fluff.gravity;
         fluff.y += fluff.velocity;
 
-        // Add new obstacles with horizontal spacing
-        if (frame % 150 === 0) { // Reduced frequency for more spacing
+        // Add new obstacles with 4x more horizontal spacing
+        if (frame % spacing === 0) { // 4x more spacing
           let minHeight = canvas.height * 0.1;
           let maxHeight = canvas.height - gap - minHeight;
           let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
