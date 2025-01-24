@@ -232,11 +232,30 @@
     // Initialize canvas and fluff position
     resizeCanvas();
 
-    let lastTime = 0;
-    function update(currentTime) {
-      const dt = (currentTime - lastTime) / 1000; // Delta time in seconds
-      lastTime = currentTime;
+    function drawFluff() {
+      ctx.save();
+      ctx.translate(fluff.x + fluff.width/2, fluff.y + fluff.height/2);
+      fluff.rotation = Math.min(Math.max(fluff.velocity * 3, -45), 45);
+      ctx.rotate(fluff.rotation * Math.PI/180);
+      
+      if (fluffImage.complete) {
+        ctx.drawImage(fluffImage, -fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
+      } else {
+        ctx.fillStyle = "#6e44ff";
+        ctx.fillRect(-fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
+      }
+      ctx.restore();
+    }
 
+    function drawCoins() {
+      ctx.fillStyle = "#00d4ff";
+      coins.forEach((coin) => {
+        ctx.fillRect(coin.x, 0, coinWidth, coin.top);
+        ctx.fillRect(coin.x, canvas.height - coin.bottom, coinWidth, coin.bottom);
+      });
+    }
+
+    function update() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (!gameStarted) {
@@ -245,8 +264,8 @@
       }
 
       if (!gameOver) {
-        fluff.velocity += fluff.gravity * dt;
-        fluff.y += fluff.velocity * dt;
+        fluff.velocity += fluff.gravity;
+        fluff.y += fluff.velocity;
 
         // Add new obstacles with adjusted horizontal spacing
         if (frame % spacing === 0) {
@@ -262,7 +281,7 @@
         }
 
         coins.forEach((coin, index) => {
-          coin.x -= canvas.width * 0.002 * dt; // Slower speed
+          coin.x -= canvas.width * 0.002; // Slower speed
 
           if (
             fluff.x + fluff.width > coin.x &&
@@ -366,7 +385,7 @@
     // Load sounds and start the game loop
     loadSounds();
     resetGame();
-    requestAnimationFrame(update);
+    update();
   </script>
 </body>
 </html>
