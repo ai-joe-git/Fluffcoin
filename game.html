@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluff Flappy</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #0a0a1a; /* Dark background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      border: 2px solid rgba(110, 68, 255, 0.5); /* Neon border */
+      box-shadow: 0 0 20px rgba(110, 68, 255, 0.5); /* Glow effect */
+    }
+    #background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      background-repeat: repeat-x;
+      animation: moveBackground linear infinite;
+    }
+    #layer1 {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="10" fill="rgba(110, 68, 255, 0.1)" /></svg>');
+      animation-duration: 20s;
+    }
+    #layer2 {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="5" fill="rgba(0, 212, 255, 0.1)" /></svg>');
+      animation-duration: 15s;
+    }
+    #layer3 {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><polygon points="100,10 40,198 190,78 10,78 160,198" fill="rgba(110, 68, 255, 0.1)" /></svg>');
+      animation-duration: 10s;
+    }
+    @keyframes moveBackground {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Parallax Background Layers -->
+  <div id="background">
+    <div id="layer1" class="layer"></div>
+    <div id="layer2" class="layer"></div>
+    <div id="layer3" class="layer"></div>
+  </div>
+
+  <!-- Game Canvas -->
+  <canvas id="gameCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Set canvas size based on screen size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * 0.9; // 90% of screen width
+      canvas.height = window.innerHeight * 0.8; // 80% of screen height
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas(); // Initial resize
+
+    // Fluff properties
+    let fluff = {
+      x: 50,
+      y: canvas.height / 2,
+      width: 40,
+      height: 40,
+      gravity: 0.6,
+      lift: -10,
+      velocity: 0,
+    };
+
+    // Coin properties
+    let coins = [];
+    let coinWidth = 40;
+    let gap = 100;
+    let frame = 0;
+    let score = 0;
+    let gameOver = false;
+
+    // Draw Fluff
+    function drawFluff() {
+      ctx.fillStyle = "#6e44ff"; // Neon purple
+      ctx.beginPath();
+      ctx.arc(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2, fluff.width / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw Coins
+    function drawCoins() {
+      ctx.fillStyle = "#00d4ff"; // Neon blue
+      coins.forEach((coin) => {
+        ctx.fillRect(coin.x, 0, coinWidth, coin.top);
+        ctx.fillRect(coin.x, canvas.height - coin.bottom, coinWidth, coin.bottom);
+      });
+    }
+
+    // Update Game
+    function update() {
+      if (gameOver) return;
+
+      // Apply gravity
+      fluff.velocity += fluff.gravity;
+      fluff.y += fluff.velocity;
+
+      // Generate coins
+      if (frame % 90 === 0) {
+        let coinHeight = Math.random() * (canvas.height - gap);
+        coins.push({ x: canvas.width, top: coinHeight, bottom: canvas.height - coinHeight - gap });
+      }
+
+      // Move coins
+      coins.forEach((coin, index) => {
+        coin.x -= 2;
+
+        // Check collision
+        if (
+          fluff.x < coin.x + coinWidth &&
+          fluff.x + fluff.width > coin.x &&
+          (fluff.y < coin.top || fluff.y + fluff.height > canvas.height - coin.bottom)
+        ) {
+          gameOver = true;
+        }
+
+        // Increase score if coin is passed
+        if (coin.x + coinWidth < fluff.x && !coin.passed) {
+          score++;
+          coin.passed = true;
+        }
+
+        // Remove off-screen coins
+        if (coin.x + coinWidth < 0) {
+          coins.splice(index, 1);
+        }
+      });
+
+      // Check if Fluff hits the ground or ceiling
+      if (fluff.y + fluff.height > canvas.height || fluff.y < 0) {
+        gameOver = true;
+      }
+
+      // Clear canvas and redraw
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawFluff();
+      drawCoins();
+
+      // Display score
+      ctx.fillStyle = "#fff";
+      ctx.font = "20px Arial";
+      ctx.fillText("Score: " + score, 10, 30);
+
+      // Game over screen
+      if (gameOver) {
+        ctx.fillStyle = "#fff";
+        ctx.font = "30px Arial";
+        ctx.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
+        ctx.fillText("Tap to Restart", canvas.width / 2 - 100, canvas.height / 2 + 40);
+      }
+
+      frame++;
+      requestAnimationFrame(update);
+    }
+
+    // Handle clicks and touch events
+    function handleInput() {
+      if (gameOver) {
+        fluff.y = canvas.height / 2;
+        fluff.velocity = 0;
+        coins = [];
+        score = 0;
+        gameOver = false;
+      } else {
+        fluff.velocity = fluff.lift;
+      }
+    }
+    canvas.addEventListener("click", handleInput);
+    canvas.addEventListener("touchstart", handleInput);
+
+    // Start the game
+    update();
+  </script>
+</body>
+</html>
