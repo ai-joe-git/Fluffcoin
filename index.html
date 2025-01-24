@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FluffCoin</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow-x: hidden;
+      position: relative;
+      background: #0a0a1a; /* Dark background for neon contrast */
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.5);
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.8);
+    }
+
+    /* Advanced Animated Background */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: url('1737742844518.jpg') no-repeat center center/cover;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      backdrop-filter: blur(10px);
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      animation: float 3s ease-in-out infinite;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      color: #ddd;
+    }
+
+    .hero img {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(110, 68, 255, 0.3);
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+    }
+
+    .glass-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
+    }
+
+    /* Features Section */
+    .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      padding: 50px 20px;
+      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+    }
+
+    .features img {
+      width: 50px;
+      margin-bottom: 10px;
+    }
+
+    /* Roadmap Section */
+    .roadmap {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .timeline {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .phase {
+      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px;
+      flex: 1;
+      max-width: 300px;
+      border: 1px solid rgba(110, 68, 255, 0.3);
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+    }
+
+    /* Community Section */
+    .community {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-links a {
+      padding: 10px 20px;
+      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      border-radius: 5px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(110, 68, 255, 0.3);
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+    }
+
+    .social-links a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      border-top: 1px solid rgba(110, 68, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Advanced Animated Background -->
+  <div class="background"></div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <img src="1737743060933.jpg" alt="FluffCoin Logo">
+    <h1>FluffCoin</h1>
+    <p>The coin that’s 100% fluff, 0% stuff.</p>
+    <button>Get Fluffy</button>
+  </div>
+
+  <!-- About Section -->
+  <div class="about">
+    <div class="glass-card">
+      <h2>About FluffCoin</h2>
+      <p>FluffCoin is the cryptocurrency you never asked for but secretly need. It’s fluffy, it’s fun, and it’s completely useless. Join the fluff revolution today!</p>
+      <a href="#">Read the FluffPaper</a>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features">
+    <div class="glass-card">
+      <img src="1737743050406.jpg" alt="Fluff-to-Earn Icon">
+      <h3>Fluff-to-Earn</h3>
+      <p>Hold FluffCoin and watch your wallet get fluffier.</p>
+    </div>
+    <div class="glass-card">
+      <img src="1737743039972.jpg" alt="Community-Driven Icon">
+      <h3>Community-Driven</h3>
+      <p>We’re all here for the memes, not the money.</p>
+    </div>
+    <div class="glass-card">
+      <img src="1737743010645.jpg" alt="Ultra-Light Icon">
+      <h3>Ultra-Light</h3>
+      <p>No heavy tech, just pure fluff.</p>
+    </div>
+  </div>
+
+  <!-- Roadmap Section -->
+  <div class="roadmap">
+    <h2>Roadmap</h2>
+    <div class="timeline">
+      <div class="phase">Phase 1: Launch FluffCoin</div>
+      <div class="phase">Phase 2: Build the Community</div>
+      <div class="phase">Phase 3: Take Over the World</div>
+    </div>
+  </div>
+
+  <!-- Community Section -->
+  <div class="community">
+    <h2>Join the Fluff</h2>
+    <div class="social-links">
+      <a href="#">Twitter</a>
+      <a href="#">Discord</a>
+      <a href="#">Telegram</a>
+      <a href="#">Reddit</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>FluffCoin: The fluffiest coin in the crypto space.</p>
+    <p>Disclaimer: This is a meme coin. Don’t take it seriously.</p>
+  </footer>
+</body>
+                   </html>
