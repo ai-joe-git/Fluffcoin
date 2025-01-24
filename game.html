@@ -10,7 +10,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-
+    
     html, body {
       width: 100%;
       height: 100%;
@@ -38,6 +38,7 @@
       width: 100%;
       height: 100%;
       z-index: -1;
+      transition: background 1s ease-in-out;
     }
 
     .layer {
@@ -130,6 +131,14 @@
       pointSound = new Audio("point.wav");
     }
 
+    // Play sound with snappy effect
+    function playSound(sound) {
+      if (soundEnabled) {
+        sound.currentTime = 0; // Rewind to start
+        sound.play();
+      }
+    }
+
     // Toggle music
     document.getElementById("musicButton").addEventListener("click", () => {
       musicEnabled = !musicEnabled;
@@ -157,13 +166,13 @@
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
+      
       // Adjust game elements based on screen size
-      fluff.width = Math.min(canvas.width * 0.1, 50);
+      fluff.width = Math.min(canvas.width * 0.115, 57.5); // Increased by 15%
       fluff.height = fluff.width;
       coinWidth = Math.min(canvas.width * 0.1, 60);
       gap = Math.min(canvas.height * 0.4, 200); // Increased gap
-
+      
       // Reposition fluff if needed
       if (!gameStarted) {
         fluff.x = canvas.width * 0.2;
@@ -179,8 +188,8 @@
     let fluff = {
       x: 0,
       y: 0,
-      width: 50,
-      height: 50,
+      width: 57.5, // Increased by 15%
+      height: 57.5, // Increased by 15%
       gravity: 0.35, // Increased gravity for faster fall
       lift: -8, // Increased lift for faster jump
       velocity: 0,
@@ -236,12 +245,29 @@
     // Initialize canvas and fluff position
     resizeCanvas();
 
+    // Dynamic background colors
+    let backgroundColors = [
+      { start: "#0a0a1a", end: "#1a1a2e" },
+      { start: "#1a1a2e", end: "#16213e" },
+      { start: "#16213e", end: "#0f3460" },
+      { start: "#0f3460", end: "#533483" },
+      { start: "#533483", end: "#6e44ff" }
+    ];
+    let currentBackgroundIndex = 0;
+
+    function updateBackground() {
+      const background = document.getElementById("background");
+      const gradient = `linear-gradient(45deg, ${backgroundColors[currentBackgroundIndex].start}, ${backgroundColors[currentBackgroundIndex].end})`;
+      background.style.background = gradient;
+      currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundColors.length;
+    }
+
     function drawFluff() {
       ctx.save();
       ctx.translate(fluff.x + fluff.width/2, fluff.y + fluff.height/2);
       fluff.rotation = Math.min(Math.max(fluff.velocity * 3, -45), 45);
       ctx.rotate(fluff.rotation * Math.PI/180);
-
+      
       if (fluffImage.complete) {
         ctx.drawImage(fluffImage, -fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
       } else {
@@ -353,13 +379,18 @@
             (fluff.y < coin.top || fluff.y + fluff.height > canvas.height - coin.bottom)
           ) {
             gameOver = true;
-            if (soundEnabled) hitSound.play();
+            playSound(hitSound);
           }
 
           if (coin.x + coinWidth < fluff.x && !coin.passed) {
             score++;
             coin.passed = true;
-            if (soundEnabled) pointSound.play();
+            playSound(pointSound);
+
+            // Change background every 20 points
+            if (score % 20 === 0) {
+              updateBackground();
+            }
           }
 
           if (coin.x + coinWidth < 0) {
@@ -379,7 +410,7 @@
           ) {
             score += 2; // Add 2 points for collecting a star
             stars.splice(index, 1); // Remove the star
-            if (soundEnabled) pointSound.play();
+            playSound(pointSound);
           }
 
           if (star.x + fluff.width < 0) {
@@ -389,7 +420,7 @@
 
         if (fluff.y + fluff.height > canvas.height || fluff.y < 0) {
           gameOver = true;
-          if (soundEnabled) hitSound.play();
+          playSound(hitSound);
         }
       }
 
@@ -443,11 +474,12 @@
       score = 0;
       gameOver = false;
       particles = [];
+      updateBackground(); // Reset background
     }
 
     function handleInput(event) {
       event.preventDefault();
-
+      
       if (!gameStarted) {
         startGame();
       } else if (gameOver) {
@@ -457,7 +489,7 @@
       } else {
         fluff.velocity = fluff.lift;
         createParticles(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2);
-        if (soundEnabled) flapSound.play();
+        playSound(flapSound);
       }
     }
 
