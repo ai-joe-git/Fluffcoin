@@ -12,7 +12,7 @@
       color: white;
       overflow-x: hidden;
       position: relative;
-      background: #0a0a1a; /* Dark background for neon contrast */
+      background: #0a0a1a;
     }
 
     h1, h2, h3 {
@@ -65,7 +65,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.8);
       backdrop-filter: blur(10px);
     }
 
@@ -83,9 +83,9 @@
     }
 
     .hero img {
-      width: 200px; /* Increased size */
+      width: 200px;
       margin-bottom: 20px;
-      animation: float 3s ease-in-out infinite; /* Added floating animation */
+      animation: float 3s ease-in-out infinite;
     }
 
     @keyframes float {
@@ -95,7 +95,7 @@
 
     /* Glassmorphism Cards */
     .glass-card {
-      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.7);
       backdrop-filter: blur(10px);
       border-radius: 10px;
       padding: 20px;
@@ -117,12 +117,19 @@
       justify-content: space-around;
       flex-wrap: wrap;
       padding: 50px 20px;
-      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.8);
     }
 
     .features img {
-      width: 50px;
-      margin-bottom: 10px;
+      width: 360px;
+      height: 360px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .features .glass-card:hover img {
+      transform: scale(1.1);
     }
 
     /* Roadmap Section */
@@ -132,9 +139,9 @@
     }
 
     .roadmap img {
-      width: 200px; /* Same size as hero logo */
+      width: 200px;
       margin-bottom: 20px;
-      animation: float 3s ease-in-out infinite; /* Floating animation */
+      animation: float 3s ease-in-out infinite;
     }
 
     .timeline {
@@ -144,7 +151,7 @@
     }
 
     .phase {
-      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.7);
       backdrop-filter: blur(10px);
       border-radius: 10px;
       padding: 20px;
@@ -159,25 +166,25 @@
     .community {
       text-align: center;
       padding: 50px 20px;
-      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.8);
     }
 
     .social-links {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap; /* Allow wrapping to the next line */
-      gap: 10px; /* Reduced gap for better spacing */
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .social-links a {
       padding: 10px 20px;
-      background: rgba(10, 10, 26, 0.7); /* Semi-transparent dark background */
+      background: rgba(10, 10, 26, 0.7);
       border-radius: 5px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: 1px solid rgba(110, 68, 255, 0.3);
       box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
-      flex: 1 1 45%; /* Allow two buttons per row with some spacing */
-      text-align: center; /* Center text inside buttons */
+      flex: 1 1 45%;
+      text-align: center;
     }
 
     .social-links a:hover {
@@ -188,16 +195,31 @@
     /* Footer */
     footer {
       text-align: center;
-      padding: 8px; /* Further reduced padding */
-      background: rgba(10, 10, 26, 0.8); /* Semi-transparent dark background */
+      padding: 8px;
+      background: rgba(10, 10, 26, 0.8);
       border-top: 1px solid rgba(110, 68, 255, 0.3);
-      font-size: 0.8rem; /* Further reduced font size */
-      min-height: 60px; /* Ensure footer has a minimum height */
-      box-sizing: border-box; /* Include padding in height calculation */
+      font-size: 0.8rem;
+      min-height: 60px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Center content vertically */
-      align-items: center; /* Center content horizontally */
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Responsive adjustments for features images */
+    @media (max-width: 768px) {
+      .features img {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .features img {
+        width: 240px;
+        height: 240px;
+      }
     }
   </style>
 </head>
@@ -208,19 +230,17 @@
   <!-- Hero Section -->
   <div class="hero" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">  <img src="flufflogo.png" alt="FluffCoin Logo">
     <h1>FLUFFCOIN</h1>
-    <p>The coin that’s 100% fluff, 0% stuff.</p>
+    <p>The coin that's 100% fluff, 0% stuff.</p>
     <div style="display: flex; gap: 10px;">  <button onclick="window.location.href='https://pump.fun/coin/5UiiGGcmF4wPofVadX4uo1Eqfv317vLqJg6xSE34pump?coins_sort=market_cap'">Get FLUFFCOIN</button>
         <button onclick="window.location.href='game.html'">PLAY FLUFFY</button>
     </div>
 </div>
 
-
-
   <!-- About Section -->
   <div class="about">
     <div class="glass-card">
       <h2>About FluffCoin</h2>
-      <p>FLUFFCOIN is the cryptocurrency you never asked for but secretly need. It’s fluffy, it’s fun, and it’s completely useless. Join the fluff revolution today!</p>
+      <p>FLUFFCOIN is the cryptocurrency you never asked for but secretly need. It's fluffy, it's fun, and it's completely useless. Join the fluff revolution today!</p>
       <a href="#">Read the FluffPaper</a>
     </div>
   </div>
@@ -235,7 +255,7 @@
     <div class="glass-card">
       <img src="1737743050406.jpg" alt="Community-Driven Icon">
       <h3>Community-Driven</h3>
-      <p>We’re all here for the memes, not the money.</p>
+      <p>We're all here for the memes, not the money.</p>
     </div>
     <div class="glass-card">
       <img src="1737742844518.jpg" alt="Ultra-Light Icon">
@@ -246,7 +266,7 @@
 
   <!-- Roadmap Section -->
   <div class="roadmap">
-    <img src="flufflogo.png" alt="FluffCoin Logo"> <!-- Added logo here -->
+    <img src="flufflogo.png" alt="FluffCoin Logo">
     <h2>Roadmap</h2>
     <div class="timeline">
       <div class="phase">Phase 1: Launch FLUFFCOIN on Pump.fun</div>
@@ -269,7 +289,7 @@
   <!-- Footer -->
   <footer>
     <p>FLUFFCOIN: The fluffiest coin in the crypto space.</p>
-    <p>Disclaimer: This is a meme coin. Don’t take it seriously.</p>
+    <p>Disclaimer: This is a meme coin. Don't take it seriously.</p>
   </footer>
 </body>
 </html>
