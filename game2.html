@@ -57,6 +57,64 @@
       background: url('1737743010645.jpg') no-repeat center center/cover;
     }
 
+    /* Responsive Menu */
+    .menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(10, 10, 26, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      z-index: 1000;
+    }
+
+    .menu a {
+      color: white;
+      margin: 0 10px;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .menu a:hover {
+      color: #00d4ff;
+    }
+
+    .menu .logo {
+      width: 40px;
+      height: 40px;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .menu-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .menu-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
     /* Hero Section */
     .hero {
       height: 100vh;
@@ -67,6 +125,7 @@
       text-align: center;
       background: rgba(10, 10, 26, 0.8);
       backdrop-filter: blur(10px);
+      padding-top: 60px; /* Offset for fixed menu */
     }
 
     .hero h1 {
@@ -181,11 +240,29 @@
       font-weight: bold;
     }
 
-    /* Smooth Transitions */
-    .glass-card, .why-fluffcurve, .hero {
-      opacity: 1; /* Ensure sections are visible by default */
-      transform: translateY(0); /* Reset transform */
-      transition: opacity 1s ease, transform 1s ease;
+    /* Rules Section */
+    .rules {
+      padding: 50px 20px;
+      background: rgba(10, 10, 26, 0.8);
+    }
+
+    .rules h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .rules ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .rules li {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      color: #ddd;
     }
   </style>
 </head>
@@ -193,8 +270,20 @@
   <!-- Advanced Animated Background -->
   <div class="background"></div>
 
+  <!-- Responsive Menu -->
+  <div class="menu">
+    <img src="flufflogo.png" alt="FLUFFCURVE Logo" class="logo">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="menu-links">
+      <a href="#hero">Home</a>
+      <a href="#why-fluffcurve">Why FLUFFCURVE?</a>
+      <a href="#bonding-curve">Bonding Curve</a>
+      <a href="#rules">Rules</a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
-  <div class="hero">
+  <div class="hero" id="hero">
     <img src="flufflogo.png" alt="FLUFFCURVE Logo">
     <h1>FLUFFCURVE</h1>
     <p>Join the curve, earn SOL, and refer friends to earn more!</p>
@@ -203,7 +292,7 @@
   </div>
 
   <!-- Why FLUFFCURVE Section -->
-  <div class="why-fluffcurve">
+  <div class="why-fluffcurve" id="why-fluffcurve">
     <h2>Why FLUFFCURVE is Better Than Pump.fun</h2>
     <p>Let’s be real—pump.fun is like a casino where the house always wins. FLUFFCURVE? It’s like a <span class="highlight">fair, fun, and fluff-filled</span> carnival where everyone gets a prize.</p>
     <p>Here’s why FLUFFCURVE is the <span class="highlight">smart choice</span>:</p>
@@ -213,7 +302,7 @@
     </div>
     <div class="glass-card">
       <h3>Instant Payouts</h3>
-      <p>Why wait for your money? With FLUFFCURVE, you get <span class="highlight">instant payouts</span>. Affiliates and owners earn in real time. It’s like getting paid to eat cake.</p>
+      <p>Why wait for your money? With FLUFFCURVE, you get <span class="highlight">instant payouts</span>. Affiliates earn in real time. It’s like getting paid to eat cake.</p>
     </div>
     <div class="glass-card">
       <h3>Shared Success</h3>
@@ -226,7 +315,7 @@
   </div>
 
   <!-- Bonding Curve Section -->
-  <div class="glass-card">
+  <div class="glass-card" id="bonding-curve">
     <h2>Bonding Curve Progress</h2>
     <div id="chart-container">
       <svg id="chart" viewBox="0 0 500 300" preserveAspectRatio="none">
@@ -267,11 +356,16 @@
     <p>Earnings from Referrals: <span id="affiliate-earnings">0</span> SOL</p>
   </div>
 
-  <!-- Owner Section (Hidden by Default) -->
-  <div class="glass-card" id="owner-section" style="display: none;">
-    <h2>Owner Dashboard</h2>
-    <p>Total Fees Collected: <span id="total-fees">0</span> SOL</p>
-    <button id="withdraw-fees">Withdraw Fees</button>
+  <!-- Rules Section -->
+  <div class="rules" id="rules">
+    <h2>Rules</h2>
+    <ul>
+      <li>1. Everyone participates in the same bonding curve.</li>
+      <li>2. Early participants pay less and earn more.</li>
+      <li>3. When the curve reaches 10,000 SOL, tokens are automatically sold and SOL is distributed.</li>
+      <li>4. Affiliates earn 10% of fees from referred users.</li>
+      <li>5. No abandoned tokens—everyone wins together.</li>
+    </ul>
   </div>
 
   <script>
@@ -313,11 +407,10 @@
       const tokenPrice = calculateTokenPrice(tokenAmount);
       const totalFees = tokenPrice * 0.2;
       const affiliateFee = totalFees * 0.1;
-      const ownerFee = totalFees * 0.1;
 
       // Update UI
       updateProgressBar(tokenPrice);
-      updateEarnings(affiliateFee, ownerFee);
+      updateEarnings(affiliateFee);
       alert(`You bought ${tokenAmount} tokens for ${tokenPrice} SOL!`);
     });
 
@@ -338,18 +431,21 @@
       document.getElementById("flufflogo").style.bottom = `${100 - progress}%`;
     }
 
-    function updateEarnings(affiliateFee, ownerFee) {
+    function updateEarnings(affiliateFee) {
       const affiliateEarnings = parseFloat(document.getElementById("affiliate-earnings").textContent) + affiliateFee;
       document.getElementById("affiliate-earnings").textContent = affiliateEarnings.toFixed(2);
-
-      const totalFees = parseFloat(document.getElementById("total-fees").textContent) + ownerFee;
-      document.getElementById("total-fees").textContent = totalFees.toFixed(2);
     }
 
     function loadUserData() {
       // Simulate loading user data (replace with actual smart contract calls)
       document.getElementById("token-balance").textContent = "100"; // Example token balance
       document.getElementById("earnings").textContent = "0.5"; // Example earnings
+    }
+
+    // Toggle Menu for Mobile
+    function toggleMenu() {
+      const menuLinks = document.querySelector(".menu-links");
+      menuLinks.classList.toggle("active");
     }
   </script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
