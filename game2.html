@@ -206,11 +206,37 @@
       transition: transform 5s linear, opacity 1s ease;
     }
 
+    /* Solana Rain Effect */
+    .solana-rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .solana-rain img {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+      }
+    }
+
     /* Progress Stages */
     .progress-stage {
       margin-top: 20px;
       font-size: 1.2rem;
       color: #ddd;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
 </head>
@@ -268,6 +294,7 @@
       <div id="ground"></div>
       <div id="sun"></div>
       <img id="flufflogo" src="flufflogo.png" alt="Flufflogo">
+      <div id="solana-rain" class="solana-rain"></div>
     </div>
     <p class="progress-stage" id="progress-stage">Stage: Early</p>
     <p>Total SOL Raised: <span id="total-sol">0</span> SOL</p>
@@ -305,6 +332,7 @@
   <!-- Sound Effects -->
   <audio id="whoosh-sound" src="whoosh.mp3"></audio>
   <audio id="poof-sound" src="poof.mp3"></audio>
+  <audio id="jackpot-sound" src="jackpot.mp3"></audio>
 
   <script>
     // JavaScript Code
@@ -391,6 +419,19 @@
         document.getElementById("progress-stage").textContent = "Stage: Complete";
         flufflogo.style.opacity = 0; // Evaporate the cloud
         document.getElementById("poof-sound").play();
+        startSolanaRain(); // Start Solana rain effect
+        document.getElementById("jackpot-sound").play(); // Play jackpot sound
+      }
+    }
+
+    function startSolanaRain() {
+      const solanaRain = document.getElementById("solana-rain");
+      for (let i = 0; i < 50; i++) {
+        const solanaLogo = document.createElement("img");
+        solanaLogo.src = "solana-logo.png"; // Replace with Solana logo image
+        solanaLogo.style.left = `${Math.random() * 100}%`;
+        solanaLogo.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        solanaRain.appendChild(solanaLogo);
       }
     }
 
@@ -409,6 +450,11 @@
     function toggleMenu() {
       const menuLinks = document.querySelector(".menu-links");
       menuLinks.classList.toggle("active");
+    }
+
+    // Demo Mode
+    if (!window.solana) {
+      updateProgressBar(2500); // Simulate 25% progress
     }
   </script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
