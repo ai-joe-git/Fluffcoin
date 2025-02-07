@@ -91,6 +91,54 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: rgba(10, 10, 26, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      border: 1px solid rgba(110, 68, 255, 0.3);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -106,30 +154,11 @@
 
     <h1 class="text-4xl font-bold text-white text-center mb-8">Fluff.fun</h1>
 
-    <!-- Dark/Light Mode Toggle -->
-    <div class="absolute top-4 right-4">
-      <button id="themeToggle" class="p-2 bg-white/20 rounded-lg text-white">
-        <i id="themeIcon" class="fas fa-sun"></i>
+    <!-- Login Button -->
+    <div class="flex justify-center mb-8">
+      <button id="openLoginModal" class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 hover-grow">
+        Log in or Sign Up
       </button>
-    </div>
-
-    <!-- Login/Connection Page -->
-    <div id="loginPage" class="mb-8 text-center">
-      <h2 class="text-2xl font-semibold text-white mb-4">Log in or Sign Up</h2>
-      <input id="email" type="email" placeholder="your@email.com" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none mb-4">
-      <button id="submitBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 mb-4">
-        Submit
-      </button>
-      <p class="text-white mb-4">Protected by <span class="font-bold">Privy</span></p>
-      <p class="text-white mb-4">OR</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Brave Wallet</button>
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Phantom</button>
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Solfare</button>
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Magic Eden</button>
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Torus</button>
-        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">WalletConnect</button>
-      </div>
     </div>
 
     <!-- Token Creation Section -->
@@ -233,6 +262,28 @@
     </div>
   </div>
 
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <button id="closeLoginModal" class="close-modal">&times;</button>
+      <h2 class="text-2xl font-semibold text-white mb-4">Log in or Sign Up</h2>
+      <input id="email" type="email" placeholder="your@email.com" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none mb-4">
+      <button id="submitBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 mb-4">
+        Submit
+      </button>
+      <p class="text-white mb-4">Protected by <span class="font-bold">Privy</span></p>
+      <p class="text-white mb-4">OR</p>
+      <div class="grid grid-cols-2 gap-4">
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Brave Wallet</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Phantom</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Solfare</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Magic Eden</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Torus</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">WalletConnect</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Web3.js or Solana Web3 Integration -->
   <script>
     // Dark/Light Mode Toggle
@@ -254,11 +305,50 @@
       }
     });
 
-    // Initialize ApexCharts
+    // Login Modal Logic
+    const loginModal = document.getElementById("loginModal");
+    const openLoginModal = document.getElementById("openLoginModal");
+    const closeLoginModal = document.getElementById("closeLoginModal");
+
+    openLoginModal.addEventListener("click", () => {
+      loginModal.style.display = "flex";
+    });
+
+    closeLoginModal.addEventListener("click", () => {
+      loginModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target === loginModal) {
+        loginModal.style.display = "none";
+      }
+    });
+
+    // Mock Data for Charts and Sections
+    const mockData = {
+      tokenPrice: [10, 15, 12, 18, 20, 25, 22],
+      tradingVolume: [100, 200, 150, 300, 250, 400, 350],
+      holderDistribution: [44, 55, 13, 43, 22],
+      transactionHistory: [
+        "UserA bought 100 FLUFF",
+        "UserB sold 50 FLUFF",
+        "UserC bought 200 FLUFF",
+      ],
+      notifications: [
+        "New token created: FLUFFCOIN",
+        "Token price increased by 5%",
+      ],
+      chatMessages: [
+        "UserA: What do you think about the price?",
+        "UserB: I think it's going to pump soon!",
+      ],
+    };
+
+    // Initialize ApexCharts with Mock Data
     const tokenPriceChart = new ApexCharts(document.querySelector("#tokenPriceChart"), {
       series: [{
         name: "Token Price",
-        data: [10, 15, 12, 18, 20, 25, 22],
+        data: mockData.tokenPrice,
       }],
       chart: {
         type: "line",
@@ -282,7 +372,7 @@
     const tradingVolumeChart = new ApexCharts(document.querySelector("#tradingVolumeChart"), {
       series: [{
         name: "Trading Volume",
-        data: [100, 200, 150, 300, 250, 400, 350],
+        data: mockData.tradingVolume,
       }],
       chart: {
         type: "bar",
@@ -301,7 +391,7 @@
     tradingVolumeChart.render();
 
     const holderDistributionChart = new ApexCharts(document.querySelector("#holderDistributionChart"), {
-      series: [44, 55, 13, 43, 22],
+      series: mockData.holderDistribution,
       chart: {
         type: "pie",
         height: 300,
@@ -314,6 +404,36 @@
       },
     });
     holderDistributionChart.render();
+
+    // Populate Mock Data for Transaction History, Notifications, and Chat
+    const transactionHistory = document.getElementById("transactionHistory");
+    const notifications = document.getElementById("notifications");
+    const chat = document.getElementById("chat");
+
+    mockData.transactionHistory.forEach((transaction) => {
+      const li = document.createElement("li");
+      li.textContent = transaction;
+      transactionHistory.appendChild(li);
+    });
+
+    mockData.notifications.forEach((notification) => {
+      const li = document.createElement("li");
+      li.textContent = notification;
+      notifications.appendChild(li);
+    });
+
+    mockData.chatMessages.forEach((message) => {
+      const div = document.createElement("div");
+      div.textContent = message;
+      chat.appendChild(div);
+    });
+
+    // Function to Switch to Live Data
+    function switchToLiveData() {
+      // Replace mock data with live data from the blockchain
+      console.log("Switching to live data...");
+      // Add your logic to fetch live data here
+    }
 
     // Initialize
     connectWallet();
