@@ -2,506 +2,282 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Fluff Flappy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLUFFCURVE</title>
   <style>
-    * {
+    /* General Styles */
+    body {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      position: fixed;
-      touch-action: none;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow-x: hidden;
+      position: relative;
       background: #0a0a1a;
     }
 
-    #gameCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-      border: 2px solid rgba(110, 68, 255, 0.5);
-      box-shadow: 0 0 20px rgba(110, 68, 255, 0.5);
+    h1, h2, h3 {
+      margin: 0;
     }
 
-    #background {
+    p {
+      margin: 10px 0;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.5);
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.8);
+    }
+
+    /* Advanced Animated Background */
+    .background {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -1;
-      transition: background 1s ease-in-out;
+      overflow: hidden;
+      background: url('1737743010645.jpg') no-repeat center center/cover;
     }
 
-    .layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 100%;
-      background-repeat: repeat-x;
-      animation: moveBackground linear infinite;
-    }
-
-    #layer1 {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="10" fill="rgba(110, 68, 255, 0.1)" /></svg>');
-      animation-duration: 40s;
-    }
-
-    #layer2 {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="5" fill="rgba(0, 212, 255, 0.1)" /></svg>');
-      animation-duration: 30s;
-    }
-
-    #layer3 {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><polygon points="100,10 40,198 190,78 10,78 160,198" fill="rgba(110, 68, 255, 0.1)" /></svg>');
-      animation-duration: 20s;
-    }
-
-    @keyframes moveBackground {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    #menu {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      color: white;
-      font-family: Arial, sans-serif;
-      z-index: 10;
+      background: rgba(10, 10, 26, 0.8);
+      backdrop-filter: blur(10px);
     }
 
-    #menu button {
-      background: #6e44ff;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
+    .hero h1 {
+      font-size: 4rem;
+      animation: float 3s ease-in-out infinite;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero img {
+      width: 200px;
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(10, 10, 26, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(110, 68, 255, 0.3);
+      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+    }
+
+    .glass-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
+    }
+
+    /* Progress Bar */
+    #progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      transition: width 0.3s;
+    }
+
+    /* Input and Button Styles */
+    input {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid rgba(110, 68, 255, 0.3);
       border-radius: 5px;
+      background: rgba(10, 10, 26, 0.7);
+      color: white;
     }
 
-    #menu button:hover {
-      background: #00d4ff;
+    input::placeholder {
+      color: #ddd;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .hero img {
+        width: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero img {
+        width: 120px;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="background">
-    <div id="layer1" class="layer"></div>
-    <div id="layer2" class="layer"></div>
-    <div id="layer3" class="layer"></div>
+  <!-- Advanced Animated Background -->
+  <div class="background"></div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <img src="flufflogo.png" alt="FLUFFCURVE Logo">
+    <h1>FLUFFCURVE</h1>
+    <p>Join the curve, earn SOL, and refer friends to earn more!</p>
+    <button id="connect-wallet">Connect Wallet</button>
+    <p id="wallet-address"></p>
   </div>
 
-  <div id="menu">
-    <h1>Fluff Flappy</h1>
-    <button id="startButton">Start Game</button>
-    <button id="musicButton">Music: On</button>
-    <button id="soundButton">Sound: On</button>
+  <!-- Bonding Curve Section -->
+  <div class="glass-card">
+    <h2>Bonding Curve Progress</h2>
+    <div id="progress-bar">
+      <div id="progress"></div>
+    </div>
+    <p>Total SOL Raised: <span id="total-sol">0</span> SOL</p>
+    <p>Current Token Price: <span id="token-price">0</span> SOL</p>
   </div>
 
-  <canvas id="gameCanvas"></canvas>
+  <!-- User Interaction Section -->
+  <div class="glass-card">
+    <h2>Buy Tokens</h2>
+    <input type="number" id="token-amount" placeholder="Enter token amount" min="1">
+    <button id="buy-tokens">Buy Tokens</button>
+    <p>Your Token Balance: <span id="token-balance">0</span></p>
+    <p>Your Earnings: <span id="earnings">0</span> SOL</p>
+  </div>
+
+  <!-- Affiliate Section -->
+  <div class="glass-card">
+    <h2>Affiliate Program</h2>
+    <p>Your Affiliate Link: <span id="affiliate-link"></span></p>
+    <p>Earnings from Referrals: <span id="affiliate-earnings">0</span> SOL</p>
+  </div>
+
+  <!-- Owner Section (Hidden by Default) -->
+  <div class="glass-card" id="owner-section" style="display: none;">
+    <h2>Owner Dashboard</h2>
+    <p>Total Fees Collected: <span id="total-fees">0</span> SOL</p>
+    <button id="withdraw-fees">Withdraw Fees</button>
+  </div>
 
   <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    let gameStarted = false;
-    let musicEnabled = true;
-    let soundEnabled = true;
-    let backgroundMusic, flapSound, hitSound, pointSound;
+    // JavaScript Code
+    const solanaWeb3 = window.solanaWeb3;
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("devnet"));
+    let wallet;
+    let userAccount;
+    let affiliateLink;
 
-    // Load sounds
-    function loadSounds() {
-      backgroundMusic = new Audio("background-music.mp3");
-      backgroundMusic.loop = true;
-      flapSound = new Audio("flap.wav");
-      hitSound = new Audio("hit.wav");
-      pointSound = new Audio("point.wav");
-    }
-
-    // Play sound with snappy effect
-    function playSound(sound) {
-      if (soundEnabled) {
-        sound.currentTime = 0; // Rewind to start
-        sound.play();
+    // Connect Wallet
+    document.getElementById("connect-wallet").addEventListener("click", async () => {
+      if (!window.solana) {
+        alert("Please install Phantom Wallet!");
+        return;
       }
-    }
+      wallet = window.solana;
+      await wallet.connect();
+      document.getElementById("wallet-address").textContent = wallet.publicKey.toString();
+      document.getElementById("connect-wallet").disabled = true;
 
-    // Toggle music
-    document.getElementById("musicButton").addEventListener("click", () => {
-      musicEnabled = !musicEnabled;
-      document.getElementById("musicButton").textContent = `Music: ${musicEnabled ? "On" : "Off"}`;
-      if (musicEnabled) {
-        backgroundMusic.play();
-      } else {
-        backgroundMusic.pause();
-      }
+      // Generate affiliate link
+      affiliateLink = `https://fluffcurve.com?ref=${wallet.publicKey.toString()}`;
+      document.getElementById("affiliate-link").textContent = affiliateLink;
+
+      // Load user data (token balance, earnings, etc.)
+      loadUserData();
     });
 
-    // Toggle sound effects
-    document.getElementById("soundButton").addEventListener("click", () => {
-      soundEnabled = !soundEnabled;
-      document.getElementById("soundButton").textContent = `Sound: ${soundEnabled ? "On" : "Off"}`;
-    });
-
-    // Start game
-    document.getElementById("startButton").addEventListener("click", () => {
-      document.getElementById("menu").style.display = "none";
-      resetGame();
-      startGame();
-    });
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      
-      // Adjust game elements based on screen size
-      fluff.width = Math.min(canvas.width * 0.115, 57.5); // Increased by 15%
-      fluff.height = fluff.width;
-      coinWidth = Math.min(canvas.width * 0.1, 60);
-      gap = Math.min(canvas.height * 0.4, 200); // Increased gap
-      
-      // Reposition fluff if needed
-      if (!gameStarted) {
-        fluff.x = canvas.width * 0.2;
-        fluff.y = canvas.height / 2;
-      }
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-
-    const fluffImage = new Image();
-    fluffImage.src = "flufflogo.png";
-
-    let fluff = {
-      x: 0,
-      y: 0,
-      width: 57.5, // Increased by 15%
-      height: 57.5, // Increased by 15%
-      gravity: 0.35, // Increased gravity for faster fall
-      lift: -8, // Increased lift for faster jump
-      velocity: 0,
-      rotation: 0
-    };
-
-    let coins = [];
-    let stars = []; // Array to hold stars
-    let coinWidth = 60;
-    let gap = Math.min(canvas.height * 0.4, 200); // Increased gap
-    let score = 0;
-    let highScore = localStorage.getItem("highScore") || 0;
-    let gameOver = false;
-    let spacing = 300; // Reverted to original horizontal spacing
-
-    // Time-based animation variables
-    let lastTime = 0;
-    const obstacleSpeed = 0.2; // Further increased speed (pixels per millisecond)
-
-    // Particles for effect
-    let particles = [];
-    function createParticles(x, y) {
-      for (let i = 0; i < 10; i++) {
-        particles.push({
-          x: x,
-          y: y,
-          size: Math.random() * 3 + 1,
-          speedX: (Math.random() - 0.5) * 2,
-          speedY: (Math.random() - 0.5) * 2,
-          color: `rgba(110, 68, 255, ${Math.random()})`
-        });
-      }
-    }
-
-    function drawParticles() {
-      particles.forEach((particle, index) => {
-        ctx.fillStyle = particle.color;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
-
-        if (particle.size > 0.2) particle.size -= 0.1;
-
-        if (particle.size <= 0.2) {
-          particles.splice(index, 1);
-        }
-      });
-    }
-
-    // Initialize canvas and fluff position
-    resizeCanvas();
-
-    // Dynamic background colors
-    let backgroundColors = [
-      { start: "#0a0a1a", end: "#1a1a2e" },
-      { start: "#1a1a2e", end: "#16213e" },
-      { start: "#16213e", end: "#0f3460" },
-      { start: "#0f3460", end: "#533483" },
-      { start: "#533483", end: "#6e44ff" }
-    ];
-    let currentBackgroundIndex = 0;
-
-    function updateBackground() {
-      const background = document.getElementById("background");
-      const gradient = `linear-gradient(45deg, ${backgroundColors[currentBackgroundIndex].start}, ${backgroundColors[currentBackgroundIndex].end})`;
-      background.style.background = gradient;
-      currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundColors.length;
-    }
-
-    function drawFluff() {
-      ctx.save();
-      ctx.translate(fluff.x + fluff.width/2, fluff.y + fluff.height/2);
-      fluff.rotation = Math.min(Math.max(fluff.velocity * 3, -45), 45);
-      ctx.rotate(fluff.rotation * Math.PI/180);
-      
-      if (fluffImage.complete) {
-        ctx.drawImage(fluffImage, -fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
-      } else {
-        ctx.fillStyle = "#6e44ff";
-        ctx.fillRect(-fluff.width/2, -fluff.height/2, fluff.width, fluff.height);
-      }
-      ctx.restore();
-    }
-
-    // Draw obstacles with light effects
-    function drawCoins() {
-      coins.forEach((coin) => {
-        // Add gradient and texture to obstacles
-        const gradient = ctx.createLinearGradient(coin.x, 0, coin.x + coinWidth, 0);
-        gradient.addColorStop(0, "#00d4ff");
-        gradient.addColorStop(1, "#6e44ff");
-        ctx.fillStyle = gradient;
-
-        // Draw top obstacle
-        ctx.fillRect(coin.x, 0, coinWidth, coin.top);
-
-        // Draw bottom obstacle
-        ctx.fillRect(coin.x, canvas.height - coin.bottom, coinWidth, coin.bottom);
-
-        // Add light effect
-        ctx.globalCompositeOperation = "lighter";
-        ctx.fillStyle = `rgba(110, 68, 255, 0.2)`;
-        ctx.fillRect(coin.x - 10, 0, coinWidth + 20, coin.top);
-        ctx.fillRect(coin.x - 10, canvas.height - coin.bottom, coinWidth + 20, coin.bottom);
-        ctx.globalCompositeOperation = "source-over";
-      });
-    }
-
-    // Draw stars with glowing effect
-    function drawStars() {
-      stars.forEach((star, index) => {
-        ctx.save();
-        ctx.translate(star.x + fluff.width / 2, star.y + fluff.height / 2);
-        ctx.rotate(Math.sin(star.animationFrame * 0.05) * 0.2); // Floating animation
-
-        // Add glowing effect
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = "yellow";
-
-        // Draw star
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.moveTo(0, -fluff.height / 2);
-        ctx.lineTo(fluff.width / 4, -fluff.height / 4);
-        ctx.lineTo(fluff.width / 2, 0);
-        ctx.lineTo(fluff.width / 4, fluff.height / 4);
-        ctx.lineTo(0, fluff.height / 2);
-        ctx.lineTo(-fluff.width / 4, fluff.height / 4);
-        ctx.lineTo(-fluff.width / 2, 0);
-        ctx.lineTo(-fluff.width / 4, -fluff.height / 4);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.restore();
-
-        star.animationFrame++;
-      });
-    }
-
-    function update(timeStamp) {
-      if (!lastTime) lastTime = timeStamp;
-      const deltaTime = timeStamp - lastTime;
-      lastTime = timeStamp;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (!gameStarted) {
-        requestAnimationFrame(update);
+    // Buy Tokens
+    document.getElementById("buy-tokens").addEventListener("click", async () => {
+      const tokenAmount = parseInt(document.getElementById("token-amount").value);
+      if (!tokenAmount || tokenAmount < 1) {
+        alert("Please enter a valid token amount!");
         return;
       }
 
-      if (!gameOver) {
-        fluff.velocity += fluff.gravity * (deltaTime / 16); // Adjust for deltaTime
-        fluff.y += fluff.velocity * (deltaTime / 16); // Adjust for deltaTime
+      // Simulate token purchase (replace with actual smart contract call)
+      const tokenPrice = calculateTokenPrice(tokenAmount);
+      const totalFees = tokenPrice * 0.2;
+      const affiliateFee = totalFees * 0.1;
+      const ownerFee = totalFees * 0.1;
 
-        // Add new obstacles with original horizontal spacing
-        if (coins.length === 0 || coins[coins.length - 1].x < canvas.width - spacing) {
-          let minHeight = canvas.height * 0.1;
-          let maxHeight = canvas.height - gap - minHeight;
-          let coinHeight = Math.random() * (maxHeight - minHeight) + minHeight;
-          coins.push({
-            x: canvas.width,
-            top: coinHeight,
-            bottom: canvas.height - coinHeight - gap,
-            passed: false
-          });
+      // Update UI
+      updateProgressBar(tokenPrice);
+      updateEarnings(affiliateFee, ownerFee);
+      alert(`You bought ${tokenAmount} tokens for ${tokenPrice} SOL!`);
+    });
 
-          // Randomly add a star between obstacles
-          if (Math.random() < 0.5) { // 50% chance to spawn a star
-            stars.push({
-              x: canvas.width + Math.random() * 200, // Random horizontal position
-              y: Math.random() * (canvas.height - fluff.height), // Random vertical position
-              animationFrame: 0
-            });
-          }
-        }
-
-        coins.forEach((coin, index) => {
-          coin.x -= obstacleSpeed * deltaTime; // Time-based movement
-
-          if (
-            fluff.x + fluff.width > coin.x &&
-            fluff.x < coin.x + coinWidth &&
-            (fluff.y < coin.top || fluff.y + fluff.height > canvas.height - coin.bottom)
-          ) {
-            gameOver = true;
-            playSound(hitSound);
-          }
-
-          if (coin.x + coinWidth < fluff.x && !coin.passed) {
-            score++;
-            coin.passed = true;
-            playSound(pointSound);
-
-            // Change background every 20 points
-            if (score % 20 === 0) {
-              updateBackground();
-            }
-          }
-
-          if (coin.x + coinWidth < 0) {
-            coins.splice(index, 1);
-          }
-        });
-
-        // Check for star collisions
-        stars.forEach((star, index) => {
-          star.x -= obstacleSpeed * deltaTime; // Move stars with obstacles
-
-          if (
-            fluff.x + fluff.width > star.x &&
-            fluff.x < star.x + fluff.width &&
-            fluff.y + fluff.height > star.y &&
-            fluff.y < star.y + fluff.height
-          ) {
-            score += 2; // Add 2 points for collecting a star
-            stars.splice(index, 1); // Remove the star
-            playSound(pointSound);
-          }
-
-          if (star.x + fluff.width < 0) {
-            stars.splice(index, 1); // Remove star if it goes off-screen
-          }
-        });
-
-        if (fluff.y + fluff.height > canvas.height || fluff.y < 0) {
-          gameOver = true;
-          playSound(hitSound);
-        }
-      }
-
-      drawFluff();
-      drawCoins();
-      drawStars(); // Draw stars
-      drawParticles();
-
-      // Draw score
-      ctx.fillStyle = "#fff";
-      ctx.font = `${Math.min(canvas.width * 0.05, 20)}px Arial`;
-      ctx.textAlign = "left";
-      ctx.fillText(`Score: ${score}`, 10, 30);
-      ctx.fillText(`High Score: ${highScore}`, 10, 60);
-
-      if (gameOver) {
-        if (score > highScore) {
-          highScore = score;
-          localStorage.setItem("highScore", highScore);
-        }
-        ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#fff";
-        ctx.font = `${Math.min(canvas.width * 0.08, 30)}px Arial`;
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 40);
-        ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2);
-        ctx.fillText("Tap to Restart", canvas.width / 2, canvas.height / 2 + 40);
-
-        // Show menu when game is over
-        document.getElementById("menu").style.display = "block";
-      }
-
-      requestAnimationFrame(update);
+    // Helper Functions
+    function calculateTokenPrice(amount) {
+      // Replace with actual bonding curve formula
+      return amount * 0.01;
     }
 
-    function startGame() {
-      gameStarted = true;
-      fluff.velocity = fluff.lift;
-      if (musicEnabled) backgroundMusic.play();
+    function updateProgressBar(solAmount) {
+      const progressBar = document.getElementById("progress");
+      const totalSol = parseFloat(document.getElementById("total-sol").textContent) + solAmount;
+      document.getElementById("total-sol").textContent = totalSol.toFixed(2);
+      progressBar.style.width = `${(totalSol / 10000) * 100}%`; // Assuming 10,000 SOL threshold
     }
 
-    function resetGame() {
-      gameStarted = false;
-      fluff.x = canvas.width * 0.2;
-      fluff.y = canvas.height / 2;
-      fluff.velocity = 0;
-      fluff.rotation = 0;
-      coins = [];
-      stars = []; // Reset stars
-      score = 0;
-      gameOver = false;
-      particles = [];
-      updateBackground(); // Reset background
+    function updateEarnings(affiliateFee, ownerFee) {
+      const affiliateEarnings = parseFloat(document.getElementById("affiliate-earnings").textContent) + affiliateFee;
+      document.getElementById("affiliate-earnings").textContent = affiliateEarnings.toFixed(2);
+
+      const totalFees = parseFloat(document.getElementById("total-fees").textContent) + ownerFee;
+      document.getElementById("total-fees").textContent = totalFees.toFixed(2);
     }
 
-    function handleInput(event) {
-      event.preventDefault();
-      
-      if (!gameStarted) {
-        startGame();
-      } else if (gameOver) {
-        resetGame();
-        document.getElementById("menu").style.display = "none";
-        startGame();
-      } else {
-        fluff.velocity = fluff.lift;
-        createParticles(fluff.x + fluff.width / 2, fluff.y + fluff.height / 2);
-        playSound(flapSound);
-      }
+    function loadUserData() {
+      // Simulate loading user data (replace with actual smart contract calls)
+      document.getElementById("token-balance").textContent = "100"; // Example token balance
+      document.getElementById("earnings").textContent = "0.5"; // Example earnings
     }
-
-    canvas.addEventListener("click", handleInput);
-    canvas.addEventListener("touchstart", handleInput, { passive: false });
-    document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
-    document.addEventListener("contextmenu", (event) => event.preventDefault());
-
-    // Load sounds and start the game loop
-    loadSounds();
-    resetGame();
-    requestAnimationFrame(update);
   </script>
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
 </body>
 </html>
