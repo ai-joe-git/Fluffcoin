@@ -156,7 +156,7 @@
 
     <!-- Login Button -->
     <div class="flex justify-center mb-8">
-      <button id="openLoginModal" class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 hover-grow">
+      <button id="openLoginModalBtn" class="bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 hover-grow">
         Log in or Sign Up
       </button>
     </div>
@@ -307,10 +307,10 @@
 
     // Login Modal Logic
     const loginModal = document.getElementById("loginModal");
-    const openLoginModal = document.getElementById("openLoginModal");
+    const openLoginModalBtn = document.getElementById("openLoginModalBtn");
     const closeLoginModal = document.getElementById("closeLoginModal");
 
-    openLoginModal.addEventListener("click", () => {
+    openLoginModalBtn.addEventListener("click", () => {
       loginModal.style.display = "flex";
     });
 
