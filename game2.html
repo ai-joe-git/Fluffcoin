@@ -70,6 +70,7 @@
       align-items: center;
       padding: 10px 20px;
       z-index: 1000;
+      box-sizing: border-box; /* Ensure padding is included in width */
     }
 
     .menu a {
@@ -81,11 +82,6 @@
 
     .menu a:hover {
       color: #00d4ff;
-    }
-
-    .menu .logo {
-      width: 40px;
-      height: 40px;
     }
 
     .menu-toggle {
@@ -126,6 +122,7 @@
       background: rgba(10, 10, 26, 0.8);
       backdrop-filter: blur(10px);
       padding-top: 60px; /* Offset for fixed menu */
+      box-sizing: border-box; /* Ensure padding is included in height */
     }
 
     .hero h1 {
@@ -272,7 +269,6 @@
 
   <!-- Responsive Menu -->
   <div class="menu">
-    <img src="flufflogo.png" alt="FLUFFCURVE Logo" class="logo">
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <div class="menu-links">
       <a href="#hero">Home</a>
