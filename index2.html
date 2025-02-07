@@ -3,293 +3,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FluffCoin</title>
+  <title>Pump.fun Clone</title>
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- ApexCharts for Modern Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!-- Custom Styles -->
   <style>
-    /* General Styles */
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      color: white;
-      overflow-x: hidden;
-      position: relative;
-      background: #0a0a1a;
+    .gradient-bg {
+      background: linear-gradient(135deg, #6EE7B7, #3B82F6);
     }
-
-    h1, h2, h3 {
-      margin: 0;
-    }
-
-    p {
-      margin: 10px 0;
-    }
-
-    a {
-      color: white;
-      text-decoration: none;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      background: linear-gradient(135deg, #6e44ff, #00d4ff);
-      color: white;
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 15px rgba(110, 68, 255, 0.5);
-    }
-
-    button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(110, 68, 255, 0.8);
-    }
-
-    /* Advanced Animated Background */
-    .background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-      background: url('1737743010645.jpg') no-repeat center center/cover;
-    }
-
-    /* Hero Section */
-    .hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: rgba(10, 10, 26, 0.8);
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-
-    .hero h1 {
-      font-size: 4rem;
-      animation: float 3s ease-in-out infinite;
-      background: linear-gradient(135deg, #6e44ff, #00d4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hover-grow {
+      transition: transform 0.2s;
     }
-
-    .hero p {
-      font-size: 1.5rem;
-      color: #ddd;
-    }
-
-    .hero img {
-      width: 200px;
-      margin-bottom: 20px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* Glassmorphism Cards */
-    .glass-card {
-      background: rgba(10, 10, 26, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(110, 68, 255, 0.3);
-      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
-    }
-
-    .glass-card:hover {
+    .hover-grow:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
     }
-
-    /* Features Section */
-    .features {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      padding: 50px 20px;
-      background: rgba(10, 10, 26, 0.8);
+    .dark-mode {
+      background: linear-gradient(135deg, #00FFFF, #FF00FF);
+      color: #FFFFFF;
     }
-
-    .features img {
-      width: 360px;
-      height: 360px;
-      object-fit: contain;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .features .glass-card:hover img {
-      transform: scale(1.1);
-    }
-
-    /* Roadmap Section */
-    .roadmap {
-      text-align: center;
-      padding: 50px 20px;
-    }
-
-    .roadmap img {
-      width: 200px;
-      margin-bottom: 20px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .timeline {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-    }
-
-    .phase {
-      background: rgba(10, 10, 26, 0.7);
+    .dark-mode .glassmorphism {
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 10px;
-      flex: 1;
-      max-width: 300px;
-      border: 1px solid rgba(110, 68, 255, 0.3);
-      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-
-    /* Community Section */
-    .community {
-      text-align: center;
-      padding: 50px 20px;
-      background: rgba(10, 10, 26, 0.8);
+    .dark-mode input,
+    .dark-mode button {
+      background: rgba(0, 0, 0, 0.3);
+      color: #FFFFFF;
     }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
+    .dark-mode input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
     }
-
-    .social-links a {
-      padding: 10px 20px;
-      background: rgba(10, 10, 26, 0.7);
-      border-radius: 5px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(110, 68, 255, 0.3);
-      box-shadow: 0 0 15px rgba(110, 68, 255, 0.3);
-      flex: 1 1 45%;
-      text-align: center;
-    }
-
-    .social-links a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(110, 68, 255, 0.5);
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 8px;
-      background: rgba(10, 10, 26, 0.8);
-      border-top: 1px solid rgba(110, 68, 255, 0.3);
-      font-size: 0.8rem;
-      min-height: 60px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Responsive adjustments for features images */
-    @media (max-width: 768px) {
-      .features img {
-        width: 300px;
-        height: 300px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .features img {
-        width: 240px;
-        height: 240px;
-      }
+    .dark-mode .chart-container {
+      background: rgba(0, 0, 0, 0.3);
     }
   </style>
 </head>
-<body>
-  <!-- Advanced Animated Background -->
-  <div class="background"></div>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+  <div class="glassmorphism p-8 max-w-6xl w-full mx-4">
+    <h1 class="text-4xl font-bold text-white text-center mb-8">Pump.fun Clone</h1>
 
-  <!-- Hero Section -->
-  <div class="hero" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">  <img src="flufflogo.png" alt="FluffCoin Logo">
-    <h1>FLUFFCOIN</h1>
-    <p>The coin that's 100% fluff, 0% stuff.</p>
-    <div style="display: flex; gap: 10px;">  <button onclick="window.location.href='https://pump.fun/coin/5UiiGGcmF4wPofVadX4uo1Eqfv317vLqJg6xSE34pump?coins_sort=market_cap'">Get FLUFFCOIN</button>
-        <button onclick="window.location.href='game.html'">PLAY FLUFFY</button>
+    <!-- Dark/Light Mode Toggle -->
+    <div class="absolute top-4 right-4">
+      <button id="themeToggle" class="p-2 bg-white/20 rounded-lg text-white">
+        <i id="themeIcon" class="fas fa-moon"></i>
+      </button>
     </div>
-</div>
 
-  <!-- About Section -->
-  <div class="about">
-    <div class="glass-card">
-      <h2>About FluffCoin</h2>
-      <p>FLUFFCOIN is the cryptocurrency you never asked for but secretly need. It's fluffy, it's fun, and it's completely useless. Join the fluff revolution today!</p>
-      <a href="#">Read the FluffPaper</a>
+    <!-- Login/Connection Page -->
+    <div id="loginPage" class="mb-8 text-center">
+      <h2 class="text-2xl font-semibold text-white mb-4">Log in or Sign Up</h2>
+      <input id="email" type="email" placeholder="your@email.com" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none mb-4">
+      <button id="submitBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 mb-4">
+        Submit
+      </button>
+      <p class="text-white mb-4">Protected by <span class="font-bold">Privy</span></p>
+      <p class="text-white mb-4">OR</p>
+      <div class="grid grid-cols-2 gap-4">
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Brave Wallet</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Phantom</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Solfare</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Magic Eden</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">Torus</button>
+        <button class="bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition duration-300">WalletConnect</button>
+      </div>
+    </div>
+
+    <!-- Token Creation Section -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Create Your Token</h2>
+      <div class="space-y-4">
+        <input id="tokenName" type="text" placeholder="Token Name" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none">
+        <input id="tokenSymbol" type="text" placeholder="Token Symbol" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none">
+        <button id="createTokenBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 hover-grow">
+          Create Token
+        </button>
+      </div>
+    </div>
+
+    <!-- Buy/Sell Tokens Section -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Trade Tokens</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <input id="buyAmount" type="number" placeholder="Amount of SOL to Spend" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none">
+          <button id="buyTokensBtn" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition duration-300 mt-2 hover-grow">
+            Buy Tokens
+          </button>
+        </div>
+        <div>
+          <input id="sellAmount" type="number" placeholder="Amount of Tokens to Sell" class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none">
+          <button id="sellTokensBtn" class="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition duration-300 mt-2 hover-grow">
+            Sell Tokens
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token Info Section -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Token Info</h2>
+      <div class="text-white space-y-2">
+        <p>Token Name: <span id="tokenNameDisplay" class="font-bold">-</span></p>
+        <p>Token Symbol: <span id="tokenSymbolDisplay" class="font-bold">-</span></p>
+        <p>Total Supply: <span id="tokenSupplyDisplay" class="font-bold">-</span></p>
+        <p>Your Balance: <span id="userBalanceDisplay" class="font-bold">-</span></p>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Charts</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white/20 rounded-lg p-4">
+          <h3 class="text-xl font-semibold text-white mb-2">Token Price</h3>
+          <div id="tokenPriceChart"></div>
+        </div>
+        <div class="bg-white/20 rounded-lg p-4">
+          <h3 class="text-xl font-semibold text-white mb-2">Trading Volume</h3>
+          <div id="tradingVolumeChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Transaction History</h2>
+      <div class="bg-white/20 rounded-lg p-4">
+        <ul id="transactionHistory" class="text-white space-y-2">
+          <li>No transactions yet.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Holder Distribution -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Holder Distribution</h2>
+      <div class="bg-white/20 rounded-lg p-4">
+        <div id="holderDistributionChart"></div>
+      </div>
+    </div>
+
+    <!-- Serverless Blockchain Chat -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Community Chat</h2>
+      <div class="bg-white/20 rounded-lg p-4">
+        <div id="chat" class="h-48 overflow-y-auto mb-4">
+          <div class="text-white">UserA: What do you think about the price?</div>
+          <div class="text-white">UserB: I think it's going to pump soon!</div>
+        </div>
+        <input id="chatInput" type="text" placeholder="Type your message..." class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none">
+        <button id="sendChatBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 mt-2 hover-grow">
+          Send
+        </button>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold text-white mb-4">Notifications</h2>
+      <div class="bg-white/20 rounded-lg p-4">
+        <ul id="notifications" class="text-white space-y-2">
+          <li>No new notifications.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- Features Section -->
-  <div class="features">
-    <div class="glass-card">
-      <img src="1737743039972.jpg" alt="Fluff-to-Earn Icon">
-      <h3>Fluff-to-Earn</h3>
-      <p>Hold FluffCoin and watch your wallet get fluffier.</p>
-    </div>
-    <div class="glass-card">
-      <img src="1737743050406.jpg" alt="Community-Driven Icon">
-      <h3>Community-Driven</h3>
-      <p>We're all here for the memes, not the money.</p>
-    </div>
-    <div class="glass-card">
-      <img src="1737742844518.jpg" alt="Ultra-Light Icon">
-      <h3>Ultra-Light</h3>
-      <p>No heavy tech, just pure fluff.</p>
-    </div>
-  </div>
+  <!-- Web3.js or Solana Web3 Integration -->
+  <script>
+    // Dark/Light Mode Toggle
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const body = document.body;
 
-  <!-- Roadmap Section -->
-  <div class="roadmap">
-    <img src="flufflogo.png" alt="FluffCoin Logo">
-    <h2>Roadmap</h2>
-    <div class="timeline">
-      <div class="phase">Phase 1: Launch FLUFFCOIN on Pump.fun</div>
-      <div class="phase">Phase 2: Build the Community</div>
-      <div class="phase">Phase 3: Take Over the World</div>
-    </div>
-  </div>
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+      if (body.classList.contains("dark-mode")) {
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+      } else {
+        themeIcon.classList.remove("fa-sun");
+        themeIcon.classList.add("fa-moon");
+      }
+    });
 
-  <!-- Community Section -->
-  <div class="community">
-    <h2>Join the Fluff</h2>
-    <div class="social-links">
-      <a href="https://t.me/+RhiXIBrV6vsyMGQ0">Twitter</a>
-      <a href="https://t.me/+RhiXIBrV6vsyMGQ0">Discord</a>
-      <a href="https://t.me/+RhiXIBrV6vsyMGQ0">Telegram</a>
-      <a href="https://t.me/+RhiXIBrV6vsyMGQ0">Reddit</a>
-    </div>
-  </div>
+    // Initialize ApexCharts
+    const tokenPriceChart = new ApexCharts(document.querySelector("#tokenPriceChart"), {
+      series: [{
+        name: "Token Price",
+        data: [10, 15, 12, 18, 20, 25, 22],
+      }],
+      chart: {
+        type: "line",
+        height: 300,
+        background: "transparent",
+        foreColor: "#fff",
+      },
+      stroke: {
+        curve: "smooth",
+        colors: ["#3B82F6"],
+      },
+      xaxis: {
+        categories: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+      },
+      theme: {
+        mode: "dark",
+      },
+    });
+    tokenPriceChart.render();
 
-  <!-- Footer -->
-  <footer>
-    <p>FLUFFCOIN: The fluffiest coin in the crypto space.</p>
-    <p>Disclaimer: This is a meme coin. Don't take it seriously.</p>
-  </footer>
+    const tradingVolumeChart = new ApexCharts(document.querySelector("#tradingVolumeChart"), {
+      series: [{
+        name: "Trading Volume",
+        data: [100, 200, 150, 300, 250, 400, 350],
+      }],
+      chart: {
+        type: "bar",
+        height: 300,
+        background: "transparent",
+        foreColor: "#fff",
+      },
+      colors: ["#3B82F6"],
+      xaxis: {
+        categories: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+      },
+      theme: {
+        mode: "dark",
+      },
+    });
+    tradingVolumeChart.render();
+
+    const holderDistributionChart = new ApexCharts(document.querySelector("#holderDistributionChart"), {
+      series: [44, 55, 13, 43, 22],
+      chart: {
+        type: "pie",
+        height: 300,
+        background: "transparent",
+        foreColor: "#fff",
+      },
+      labels: ["UserA", "UserB", "UserC", "UserD", "UserE"],
+      theme: {
+        mode: "dark",
+      },
+    });
+    holderDistributionChart.render();
+
+    // Initialize
+    connectWallet();
+  </script>
 </body>
 </html>
