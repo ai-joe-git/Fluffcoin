@@ -155,39 +155,42 @@
       100% { left: 100%; bottom: 100%; }
     }
 
-    /* Input and Button Styles */
-    input {
-      padding: 10px;
-      margin: 5px 0;
-      border: 1px solid rgba(110, 68, 255, 0.3);
-      border-radius: 5px;
-      background: rgba(10, 10, 26, 0.7);
-      color: white;
+    /* Why FLUFFCURVE Section */
+    .why-fluffcurve {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(10, 10, 26, 0.8);
     }
 
-    input::placeholder {
+    .why-fluffcurve h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .why-fluffcurve p {
+      font-size: 1.2rem;
       color: #ddd;
+      margin: 10px 0;
     }
 
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 3rem;
-      }
-
-      .hero img {
-        width: 150px;
-      }
+    .why-fluffcurve .highlight {
+      color: #00d4ff;
+      font-weight: bold;
     }
 
-    @media (max-width: 480px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
+    /* Smooth Transitions */
+    .glass-card, .why-fluffcurve, .hero {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
 
-      .hero img {
-        width: 120px;
-      }
+    .glass-card.visible, .why-fluffcurve.visible, .hero.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
@@ -202,6 +205,29 @@
     <p>Join the curve, earn SOL, and refer friends to earn more!</p>
     <button id="connect-wallet">Connect Wallet</button>
     <p id="wallet-address"></p>
+  </div>
+
+  <!-- Why FLUFFCURVE Section -->
+  <div class="why-fluffcurve">
+    <h2>Why FLUFFCURVE is Better Than Pump.fun</h2>
+    <p>Let’s be real—pump.fun is like a casino where the house always wins. FLUFFCURVE? It’s like a <span class="highlight">fair, fun, and fluff-filled</span> carnival where everyone gets a prize.</p>
+    <p>Here’s why FLUFFCURVE is the <span class="highlight">smart choice</span>:</p>
+    <div class="glass-card">
+      <h3>No Abandoned Tokens</h3>
+      <p>On pump.fun, 99% of tokens go to zero. On FLUFFCURVE, everyone plays the <span class="highlight">same bonding curve</span>. No scams, no rug pulls—just pure, fluffy gains.</p>
+    </div>
+    <div class="glass-card">
+      <h3>Instant Payouts</h3>
+      <p>Why wait for your money? With FLUFFCURVE, you get <span class="highlight">instant payouts</span>. Affiliates and owners earn in real time. It’s like getting paid to eat cake.</p>
+    </div>
+    <div class="glass-card">
+      <h3>Shared Success</h3>
+      <p>On pump.fun, it’s every fluff for themselves. On FLUFFCURVE, we rise together. The more people join, the more everyone earns. It’s <span class="highlight">teamwork</span> at its finest.</p>
+    </div>
+    <div class="glass-card">
+      <h3>No Shitcoins, Just Fluff</h3>
+      <p>Pump.fun is flooded with tokens no one wants. FLUFFCURVE is <span class="highlight">one bonding curve</span>—simple, fair, and fun. No fluff, just fluff.</p>
+    </div>
   </div>
 
   <!-- Bonding Curve Section -->
@@ -330,6 +356,17 @@
       document.getElementById("token-balance").textContent = "100"; // Example token balance
       document.getElementById("earnings").textContent = "0.5"; // Example earnings
     }
+
+    // Smooth Transitions on Scroll
+    document.addEventListener("scroll", () => {
+      const sections = document.querySelectorAll(".glass-card, .why-fluffcurve, .hero");
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8) {
+          section.classList.add("visible");
+        }
+      });
+    });
   </script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
 </body>
