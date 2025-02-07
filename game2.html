@@ -183,14 +183,9 @@
 
     /* Smooth Transitions */
     .glass-card, .why-fluffcurve, .hero {
-      opacity: 0;
-      transform: translateY(20px);
+      opacity: 1; /* Ensure sections are visible by default */
+      transform: translateY(0); /* Reset transform */
       transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .glass-card.visible, .why-fluffcurve.visible, .hero.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
   </style>
 </head>
@@ -356,17 +351,6 @@
       document.getElementById("token-balance").textContent = "100"; // Example token balance
       document.getElementById("earnings").textContent = "0.5"; // Example earnings
     }
-
-    // Smooth Transitions on Scroll
-    document.addEventListener("scroll", () => {
-      const sections = document.querySelectorAll(".glass-card, .why-fluffcurve, .hero");
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.8) {
-          section.classList.add("visible");
-        }
-      });
-    });
   </script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
 </body>
