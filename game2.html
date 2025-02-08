@@ -203,7 +203,7 @@
       left: 20px;
       width: 60px;
       height: 60px;
-      transition: transform 5s linear, opacity 1s ease;
+      transition: transform 60s linear, opacity 1s ease;
     }
 
     /* Solana Rain Effect */
@@ -234,6 +234,16 @@
       margin-top: 20px;
       font-size: 1.2rem;
       color: #ddd;
+      background: linear-gradient(135deg, #6e44ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Gradient Text for Sections */
+    .why-fluffcurve h2,
+    .rules h2,
+    .glass-card h2,
+    .glass-card h3 {
       background: linear-gradient(135deg, #6e44ff, #00d4ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -454,7 +464,20 @@
 
     // Demo Mode
     if (!window.solana) {
-      updateProgressBar(2500); // Simulate 25% progress
+      let progress = 0;
+      const demoInterval = setInterval(() => {
+        progress += 1;
+        updateProgressBar(100); // Simulate progress
+        if (progress >= 100) {
+          clearInterval(demoInterval);
+          setTimeout(() => {
+            progress = 0;
+            document.getElementById("flufflogo").style.opacity = 1;
+            document.getElementById("flufflogo").style.transform = "translateY(0) translateX(0)";
+            document.getElementById("solana-rain").innerHTML = ""; // Reset rain
+          }, 2000); // Reset after 2 seconds
+        }
+      }, 600); // 1 minute for 0% to 100%
     }
   </script>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
